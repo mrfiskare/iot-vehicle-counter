@@ -1,5 +1,5 @@
 /* 
- *  Ref: https://create.arduino.cc/projecthub/mafzal/temperature-monitoring-with-dht22-arduino-15b013 
+ *  DHT22: https://create.arduino.cc/projecthub/mafzal/temperature-monitoring-with-dht22-arduino-15b013 
 */
 
 void setup() {
