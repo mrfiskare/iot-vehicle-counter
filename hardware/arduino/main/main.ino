@@ -1,40 +1,47 @@
-/* 
- *  DHT22: https://create.arduino.cc/projecthub/mafzal/temperature-monitoring-with-dht22-arduino-15b013 
+/*
+  Arduino Humidity Sensor: Basic code that demonstrates the usage of Adafruit's libaries with the DHT sensor.
+  Code is based off the example code in the DHT library. Created 25/04/2019 By Gus
+  Resource: https://pimylifeup.com/arduino-humidity-sensor-dht22/ 
+  Requires the following libraries to be installed:
+  DHT Sensor Library: https://github.com/adafruit/DHT-sensor-library
+  Adafruit Unified Sensor Library : https://github.com/adafruit/Adafruit_Sensor
 */
 
-//Libraries
-#include <DHT.h>;
+#include <DHT.h> //Include the DHT library.
 
-//Constants
-#define DHTPIN 7  // what pin we're connected to
-#define DHTTYPE DHT22 // DHT 22  (AM2302)
-DHT dht(DHTPIN, DHTTYPE); // Initialize DHT sensor for normal 16mhz Arduino
+#define dhtPin 2 //Define the type data pin
+#define DHTType DHT22 //Define the DHT sensor (DHT11, DHT21, or DHT22)
 
-//Variables
-float hum;  //Stores humidity value
-float temp; //Stores temperature value
+//Instantiate the dht class with our data pin and DHT type.
+DHT dht = DHT(dhtPin, DHTType);
 
-// Put your setup code here, to run once
 void setup() 
 {
-  Serial.begin(9600);
-  dht.begin();
+  Serial.begin(9600); //Start the serial interface on 9600
+  dht.begin();   //Call the begin class in the dht object
 }
 
-// put your main code here, to run repeatedly:
 void loop() 
 {
-  // 2 sec. delay required my dht22
-  delay(2500);
+  delay(2000); // Delay for 2 seconds as the DHT22 sampling rate is 0.5Hz
   
-  //Read data and store it to variables hum and temp
-  hum = dht.readHumidity();
-  temp= dht.readTemperature();
+  float humidity = dht.readHumidity();
+  float temp = dht.readTemperature();
+
+  // Check for any errors, if there is, display error and restart.
+  if (isnan(humidity) || isnan(temp)) 
+  {
+    Serial.println("Failed to read from the DHT sensor, check wiring.");
+    return;
+  }
   
-  //Print temp and humidity values to serial monitor
   Serial.print("Humidity: ");
-  Serial.print(hum);
-  Serial.print(" %, Temp: ");
+  Serial.print(humidity);
+  
+  Serial.print("% || Temperature: ");
   Serial.print(temp);
-  Serial.println(" Celsius");
+  Serial.print("°C ");
+  
+  Serial.println();
+  delay(10000);
 }
