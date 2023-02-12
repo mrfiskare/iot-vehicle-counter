@@ -28,4 +28,3 @@ raspivid \
     --framerate 15 \
     --roi 0.3,0.3,0.6,0.6 \
     --output "$file_path"
-
