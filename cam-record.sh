@@ -5,3 +5,18 @@ set -e
 
 # Get the current date and time
 date=$(date +%F_%H-%M)
+
+# Set directory for video files
+cam_output="/home/pi/cam_output"
+mkdir -p "$cam_output"
+
+# Record raw video
+raspivid \
+    --width 640 \
+    --height 640 \
+    --timeout 240000 \
+    --rotation 180 \
+    --framerate 15 \
+    --roi 0.3,0.3,0.6,0.6 \
+    --output "$cam_output"".h264"
+
