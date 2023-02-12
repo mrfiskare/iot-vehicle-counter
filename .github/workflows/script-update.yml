@@ -16,5 +16,5 @@ jobs:
           port: ${{secrets.PORT}} # Remote server port -  Default: 22 - optional
           user: ${{secrets.USER}} # Remote server user - required
           private_key: ${{secrets.PRIVATE_KEY}} # Private ssh key registered on the remote server - required
-          # host_fingerprint: ${{secrets.HOST_FINGERPRINT}} # Public ssh key fingerprint, viewable via ssh-keyscan -H $HOST -p $PORT - optional
+          host_fingerprint: ${{secrets.HOST_FINGERPRINT}} # Public ssh key fingerprint, viewable via ssh-keyscan -H $HOST -p $PORT - optional
           command: touch /home/pi/cicd.txt
