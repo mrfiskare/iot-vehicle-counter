@@ -20,7 +20,5 @@ jobs:
           username: "pi"
           insecure_ignore_fingerprint: "true"
           insecure_password: "@Rduino"
-          source: |
-            ./a.txt
-            ./b.txt
-          target: "/home/pi"
+          source: "./a.txt"
+          target: "/home/pi/a.txt"
