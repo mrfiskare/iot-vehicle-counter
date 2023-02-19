@@ -24,18 +24,16 @@ jobs:
           target: "/home/pi/scripts/cam-record.sh"
       
       - name: SSH command runner
-        uses: Evaneos/ssh-action@v0.1.0
+        uses: fifsky/ssh-action@master
         with:
-          # Remote host(s) to connect to
-          hosts: ${{ secrets.HOST }}
-          # One or multiple commands to run on the remote host(s)
-          commands: pwd
-          # Remote user to connect with
+          # Command to execute on the remote server.
+          command: pwd
+          # Hostname or IP address of the server.
+          host: ${{ secrets.HOST }}
+          # Username for authentication.
           user: ${{ secrets.USER }}
-          # Remote port to connect to
+          # Port number of the server.
           port: 12399
-          # Password to connect with
-          password: ${{ secrets.PASSWORD }}
           
       - name: Run shell script
         run: |
