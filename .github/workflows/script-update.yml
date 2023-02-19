@@ -22,3 +22,6 @@ jobs:
           insecure_password: ${{ secrets.PASSWORD }}
           source: "./cam-record.sh"
           target: "/home/pi/scripts/cam-record.sh"
+          
+      - name: Run shell script
+        run: ls -la
