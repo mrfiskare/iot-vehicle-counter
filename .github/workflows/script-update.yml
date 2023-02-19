@@ -19,7 +19,6 @@ jobs:
           port: "12399"
           username: ${{ secrets.USER }}
           insecure_ignore_fingerprint: "true"
-          key: ${{ secrets.PRIVATE_KEY }}
+          insecure_password: ${{ secrets.PASSWORD }}
           source: "./cam-record.sh"
           target: "/home/pi/scripts/cam-record.sh"
-
