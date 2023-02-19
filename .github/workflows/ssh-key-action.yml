@@ -31,7 +31,9 @@ jobs:
           insecure_ignore_fingerprint: "true"
           fingerprint: ${{ secrets.FINGERPRINT }}
           key: ${{ secrets.PRIVATE_KEY }}
-          source: "./cam-record.sh"
+          source: |
+            "./record-video.sh"
+            "./rename-split-files.sh"
           target: "/home/pi/scripts/cam-record.sh"
           
       - name: SSH command runner
