@@ -21,7 +21,7 @@ jobs:
         # port: 12399
         run: ssh-keyscan -p ${{ secrets.PORT }} -H ${{ secrets.HOST }}  >> ~/.ssh/known_hosts
         
-      - name: Upload camera script via SCP
+      - name: SCP upload -> record-video.sh
         uses: nicklasfrahm/scp-action@main
         with:
           direction: "upload"
@@ -31,10 +31,21 @@ jobs:
           insecure_ignore_fingerprint: "true"
           fingerprint: ${{ secrets.FINGERPRINT }}
           key: ${{ secrets.PRIVATE_KEY }}
-          source: |
-            ./record-video.sh
-            ./rename-split-files.sh
-          target: /home/pi/scripts
+          source: "./record-video.sh"
+          target: "/home/pi/scripts/record-video.sh"
+
+        - name: SCP upload -> rename-split-files.sh
+          uses: nicklasfrahm/scp-action@main
+          with:
+            direction: "upload"
+            host: ${{ secrets.HOST }}
+            port: ${{ secrets.PORT }}
+            username: ${{ secrets.USER }}
+            insecure_ignore_fingerprint: "true"
+            fingerprint: ${{ secrets.FINGERPRINT }}
+            key: ${{ secrets.PRIVATE_KEY }}
+            source: "./rename-split-files.sh"
+            target: "/home/pi/scripts/rename-split-files.sh"
           
       - name: SSH command runner
         uses: fifsky/ssh-action@master
