@@ -17,8 +17,8 @@ jobs:
           direction: "upload"
           host: ${{ secrets.HOST }}
           port: "12399"
-          username: "pi"
-          insecure_ignore_fingerprint: "true"
-          insecure_password: "@Rduino"
-          source: "./a.txt"
-          target: "/home/pi/a.txt"
+          username: ${{ secrets.USER }}
+          fingerprint: ${{ secrets.HOST_FINGERPRINT }}
+          key: ${{ secrets.PRIVATE_KEY }}
+          source: "./cam-record.sh"
+          target: "/home/pi/scripts/cam-record.sh"
