@@ -24,7 +24,7 @@ jobs:
       - name: SSH command runner
         uses: fifsky/ssh-action@master
         with:
-          command: rm /home/pi/scripts/*.sh
+          command: touch /home/pi/ssh-works-YAYYY.txt
           host: ${{ secrets.HOST }}
           user: ${{ secrets.USER }}
           port: ${{ secrets.PORT }}
