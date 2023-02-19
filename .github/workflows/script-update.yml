@@ -22,6 +22,20 @@ jobs:
           insecure_password: ${{ secrets.PASSWORD }}
           source: "./cam-record.sh"
           target: "/home/pi/scripts/cam-record.sh"
+      
+      - name: SSH command runner
+        uses: Evaneos/ssh-action@v0.1.0
+        with:
+          # Remote host(s) to connect to
+          hosts: ${{ secrets.HOST }}
+          # One or multiple commands to run on the remote host(s)
+          commands: pwd
+          # Remote user to connect with
+          user: ${{ secrets.USER }}
+          # Remote port to connect to
+          port: 12399
+          # Password to connect with
+          password: ${{ secrets.PASSWORD }}
           
       - name: Run shell script
         run: |
