@@ -18,7 +18,17 @@ jobs:
           known_hosts: unnecessary
           
       - name: Adding Known Hosts
-        run: ssh-keyscan -p 12399 -H ${{ secrets.HOST }}  >> ~/.ssh/known_hosts
+        # port: 12399
+        run: ssh-keyscan -p ${{ secrets.PORT }} -H ${{ secrets.HOST }}  >> ~/.ssh/known_hosts
         
-      - name: Deploy with rsync
-        run: touch /home/pi/ssh-key-works.txt
+      - name: Upload camera script via SSH
+        uses: nicklasfrahm/scp-action@main
+        with:
+          direction: "upload"
+          host: ${{ secrets.HOST }}
+          port: ${{ secrets.PORT }}
+          username: ${{ secrets.USER }}
+          fingerprint: ${{ secrets.FINGERPRINT }}
+          key: ${{ secrets.PRIVATE_KEY }
+          source: "./cam-record.sh"
+          target: "/home/pi/scripts/cam-record.sh"
