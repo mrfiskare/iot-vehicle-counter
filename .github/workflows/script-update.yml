@@ -18,7 +18,8 @@ jobs:
           host: ${{ secrets.HOST }}
           port: "12399"
           username: ${{ secrets.USER }}
-          fingerprint: ${{ secrets.HOST_FINGERPRINT }}
+          insecure_ignore_fingerprint: "true"
           key: ${{ secrets.PRIVATE_KEY }}
           source: "./cam-record.sh"
           target: "/home/pi/scripts/cam-record.sh"
+
