@@ -15,7 +15,7 @@ jobs:
         uses: nicklasfrahm/scp-action@main
         with:
           direction: "upload"
-          host: "4.tcp.eu.ngrok.io"
+          host: ${{ secrets.HOST }}
           port: "12399"
           username: "pi"
           insecure_ignore_fingerprint: "true"
