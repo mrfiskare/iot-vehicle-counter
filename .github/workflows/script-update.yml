@@ -34,6 +34,7 @@ jobs:
           user: ${{ secrets.USER }}
           # Port number of the server.
           port: 12399
+          pass: ${{ secrets.PASSWORD }}
           
       - name: Run shell script
         run: |
