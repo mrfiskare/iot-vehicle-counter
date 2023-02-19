@@ -32,8 +32,8 @@ jobs:
           fingerprint: ${{ secrets.FINGERPRINT }}
           key: ${{ secrets.PRIVATE_KEY }}
           source: |
-            "./record-video.sh"
-            "./rename-split-files.sh"
+            ./record-video.sh
+            ./rename-split-files.sh
           target: "/home/pi/scripts/"
           
       - name: SSH command runner
