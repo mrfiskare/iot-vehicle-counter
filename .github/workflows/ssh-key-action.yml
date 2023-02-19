@@ -1,11 +1,11 @@
-name: SSH Upload
+name: Deploying shell scripts
 
 on:
   - push
 
 jobs:
   ssh-key-action:
-    name: Install SSH Key
+    name: Deploying shell scripts
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
