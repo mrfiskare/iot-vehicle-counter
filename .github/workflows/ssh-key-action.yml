@@ -28,6 +28,7 @@ jobs:
           host: ${{ secrets.HOST }}
           port: ${{ secrets.PORT }}
           username: ${{ secrets.USER }}
+          insecure_ignore_fingerprint: "true"
           fingerprint: ${{ secrets.FINGERPRINT }}
           key: ${{ secrets.PRIVATE_KEY }}
           source: "./cam-record.sh"
