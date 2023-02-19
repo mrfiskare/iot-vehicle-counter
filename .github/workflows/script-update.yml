@@ -24,4 +24,6 @@ jobs:
           target: "/home/pi/scripts/cam-record.sh"
           
       - name: Run shell script
-        run: pwd
+        run: |
+          ls -a
+          pwd
