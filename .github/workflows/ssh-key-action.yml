@@ -20,6 +20,15 @@ jobs:
       - name: Adding Known Hosts
         # port: 12399
         run: ssh-keyscan -p ${{ secrets.PORT }} -H ${{ secrets.HOST }}  >> ~/.ssh/known_hosts
+
+      - name: SSH command runner
+        uses: fifsky/ssh-action@master
+        with:
+          command: rm /home/pi/scripts/*.sh
+          host: ${{ secrets.HOST }}
+          user: ${{ secrets.USER }}
+          port: ${{ secrets.PORT }}
+          key: ${{ secrets.PRIVATE_KEY}}
         
       - name: SCP upload -> record-video.sh
         uses: nicklasfrahm/scp-action@main
@@ -47,15 +56,3 @@ jobs:
           source: "./rename-split-files.sh"
           target: "/home/pi/scripts/rename-split-files.sh"
           
-      - name: SSH command runner
-        uses: fifsky/ssh-action@master
-        with:
-          # Command to execute on the remote server.
-          command: touch /home/pi/ssh-works-YAYYY.txt
-          # Hostname or IP address of the server.
-          host: ${{ secrets.HOST }}
-          # Username for authentication.
-          user: ${{ secrets.USER }}
-          # Port number of the server.
-          port: ${{ secrets.PORT }}
-          key: ${{ secrets.PRIVATE_KEY}}
