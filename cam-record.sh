@@ -16,7 +16,7 @@ mkdir -p "$cam_output"
 # Set the name of the video files
 
 file_name="recording.h264"
-file_path="$cam_output""$file_name"
+path="$cam_output""$file_name"
 
 # Record raw video
 
@@ -27,4 +27,4 @@ raspivid \
     --rotation 180 \
     --framerate 15 \
     --roi 0.3,0.3,0.6,0.6 \
-    --output "$file_path"
+    --output "$path"
