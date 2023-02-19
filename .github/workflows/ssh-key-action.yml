@@ -34,7 +34,7 @@ jobs:
           source: |
             "./record-video.sh"
             "./rename-split-files.sh"
-          target: "/home/pi/scripts/cam-record.sh"
+          target: "/home/pi/scripts/"
           
       - name: SSH command runner
         uses: fifsky/ssh-action@master
