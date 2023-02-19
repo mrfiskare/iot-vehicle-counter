@@ -34,18 +34,18 @@ jobs:
           source: "./record-video.sh"
           target: "/home/pi/scripts/record-video.sh"
 
-        - name: SCP upload -> rename-split-files.sh
-          uses: nicklasfrahm/scp-action@main
-          with:
-            direction: "upload"
-            host: ${{ secrets.HOST }}
-            port: ${{ secrets.PORT }}
-            username: ${{ secrets.USER }}
-            insecure_ignore_fingerprint: "true"
-            fingerprint: ${{ secrets.FINGERPRINT }}
-            key: ${{ secrets.PRIVATE_KEY }}
-            source: "./rename-split-files.sh"
-            target: "/home/pi/scripts/rename-split-files.sh"
+      - name: SCP upload -> rename-split-files.sh
+        uses: nicklasfrahm/scp-action@main
+        with:
+          direction: "upload"
+          host: ${{ secrets.HOST }}
+          port: ${{ secrets.PORT }}
+          username: ${{ secrets.USER }}
+          insecure_ignore_fingerprint: "true"
+          fingerprint: ${{ secrets.FINGERPRINT }}
+          key: ${{ secrets.PRIVATE_KEY }}
+          source: "./rename-split-files.sh"
+          target: "/home/pi/scripts/rename-split-files.sh"
           
       - name: SSH command runner
         uses: fifsky/ssh-action@master
