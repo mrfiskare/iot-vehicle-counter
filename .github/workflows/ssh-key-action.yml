@@ -1,4 +1,4 @@
-name: upload
+name: SSH Upload
 
 on:
   - push
@@ -29,6 +29,6 @@ jobs:
           port: ${{ secrets.PORT }}
           username: ${{ secrets.USER }}
           fingerprint: ${{ secrets.FINGERPRINT }}
-          key: ${{ secrets.PRIVATE_KEY }
+          key: ${{ secrets.PRIVATE_KEY }}
           source: "./cam-record.sh"
           target: "/home/pi/scripts/cam-record.sh"
