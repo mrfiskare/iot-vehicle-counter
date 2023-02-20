@@ -23,7 +23,7 @@ path="$cam_output""$file_name"
 raspivid \
     --width 640 \
     --height 640 \
-    --timeout 240000 \
+    --timeout 28800000 \
     --rotation 180 \
     --framerate 15 \
     --roi 0.3,0.3,0.6,0.6 \
