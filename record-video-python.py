@@ -18,9 +18,7 @@ recording_length = 60 * 2
 
 output_directory = "/home/pi/cam_output"
 
-# Record 4 1-minute long videos
-
-file_name = output_directory + 'video_{:02d}.h264'
+# Record videos splitted into parts
 
 for i in range(4):
 
