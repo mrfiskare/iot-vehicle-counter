@@ -29,33 +29,30 @@ for file_name in os.listdir(output_directory):
         os.remove(file_path)
         print(f"Removed {output_directory+file_name}")
 
-# Get the available space on the root partition in bytes
-
-available_space = psutil.disk_usage('/').free
-
-# Convert bytes to GB
-
-available_space_gb = available_space / (1024 ** 3)
-print(f"Available space: {available_space_gb:.2f} GB")
-
 # Record videos splitted into parts
 
 for i in range(3):
+
+    # Get the available space on the root partition in bytes
+
+    available_space = psutil.disk_usage('/').free
+
+    # Convert bytes to GB
+
+    available_space_gb = available_space / (1024 ** 3)
+    print(f"Available space: {available_space_gb:.2f} GB")
 
     # Check if available space is at least 10 GB
 
     if available_space_gb < 10:
 
-        print("Error: Not enough free space on the machine!")
+        sys.exit("Error: Not enough free space on the machine!")
 
     else:
 
     # Set the output filename to the current timestamp
 
         output_filename = output_directory + time.strftime("%Y-%m-%d_%H-%M") + ".h264"
-
-        # exit unsuccessfully
-        sys.exit('Something bad happened')
 
         camera.start_recording(output_filename)
         camera.wait_recording(recording_length)  # 1 minute = 60 seconds
