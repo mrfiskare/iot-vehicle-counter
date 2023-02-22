@@ -3,6 +3,7 @@ import time
 import picamera
 import os
 import psutil
+import shutil
 
 # Set up the PiCamera object
 
@@ -17,30 +18,34 @@ camera.framerate = 15
 
 recording_length = 60 * 60
 
-# Set the output directory
+# Set the output directories
 
 output_directory = "/home/pi/cam_output/"
+done_directory = "/home/pi/cam_output/captured/"
 
-# Iterate over the files in the directory and remove each file
+# Delete previous recordings
 
-for file_name in os.listdir(output_directory):
-    file_path = os.path.join(output_directory, file_name)
-    if os.path.isfile(file_path):
-        os.remove(file_path)
-        print(f"Removed {output_directory+file_name}")
+if os.path.exists(output_directory) :
+    shutil.rmtree(output_directory)
+
+if not os.path.exists(output_directory) :
+    os.makedirs(output_directory)
+
+if os.path.exists(done_directory) :
+    shutil.rmtree(done_directory)
+
+if not os.path.exists(done_directory) :
+    os.makedirs(done_directory)
 
 # Record videos splitted into parts
 
 for i in range(4):
 
-    # Get the available space on the root partition in bytes
+    # Get the available space on the root partition in GB
 
     available_space = psutil.disk_usage('/').free
-
-    # Convert bytes to GB
-
     available_space_gb = available_space / (1024 ** 3)
-    print(f"Available space: {available_space_gb:.2f} GB")
+    print(f"\nAvailable space: {available_space_gb:.2f} GB")
 
     # Check if available space is at least 10 GB
 
@@ -52,19 +57,17 @@ for i in range(4):
 
     # Set the output filename to the current timestamp
 
-        output_filename = output_directory + time.strftime("%Y-%m-%d_%H-%M") + ".h264"
+        timestamped_file = time.strftime("%Y-%m-%d_%H-%M") + ".h264"
+        output_filename = output_directory + timestamped_file
 
         camera.start_recording(output_filename)
         camera.wait_recording(recording_length)
         camera.stop_recording()
-
         time.sleep(2)
-        print(f"Recorded {i+1} minutes of footage at {camera.framerate}FPS.")
-
-
-
-
-
-    
         
+        # Move the file to the captured folder
 
+        os.rename(output_filename, done_directory + timestamped_file)
+        print(f"Recorded: {done_directory}{timestamped_file}")
+
+print("\n")
