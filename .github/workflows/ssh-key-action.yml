@@ -25,8 +25,7 @@ jobs:
         uses: fifsky/ssh-action@master
         with:
           command: |
-            cd /home/pi/scripts
-            rm *.sh
+            rm -rfv /home/pi/scripts/*
           host: ${{ secrets.HOST }}
           user: ${{ secrets.USER }}
           port: ${{ secrets.PORT }}
