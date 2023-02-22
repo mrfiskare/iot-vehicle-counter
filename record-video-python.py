@@ -4,6 +4,8 @@ from time import sleep
 camera = PiCamera()
 camera.resolution = (640, 640)
 camera.vflip = True
+camera.hflip = True
+camera.zoom=(0.3,0.3,0.7,0.7)
 camera.framerate = 15
 
 # Record 4 1-minute long videos
