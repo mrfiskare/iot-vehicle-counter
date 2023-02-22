@@ -15,7 +15,7 @@ camera.framerate = 15
 
 # Set the recording length (in seconds)
 
-recording_length = 60 * 1
+recording_length = 60 * 60
 
 # Set the output directory
 
@@ -31,7 +31,7 @@ for file_name in os.listdir(output_directory):
 
 # Record videos splitted into parts
 
-for i in range(3):
+for i in range(4):
 
     # Get the available space on the root partition in bytes
 
@@ -55,11 +55,10 @@ for i in range(3):
         output_filename = output_directory + time.strftime("%Y-%m-%d_%H-%M") + ".h264"
 
         camera.start_recording(output_filename)
-        camera.wait_recording(recording_length)  # 1 minute = 60 seconds
+        camera.wait_recording(recording_length)
         camera.stop_recording()
 
         time.sleep(2)
-
         print(f"Recorded {i+1} minutes of footage at {camera.framerate}FPS.")
 
 
