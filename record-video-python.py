@@ -14,10 +14,6 @@ camera.framerate = 15
 
 recording_length = 60
 
-# Set the total recording time (in seconds)
-
-total_recording_time = 8 * 60
-
 # Set the output directory
 
 output_directory = "/home/pi/"
@@ -28,7 +24,15 @@ file_name = output_directory + 'video_{:02d}.h264'
 
 for i in range(4):
 
-    camera.start_recording(file_name.format(i))
-    camera.wait_recording(60)  # 1 minute = 60 seconds
+    # Set the output filename to the current timestamp
+
+    output_filename = output_directory + time.strftime("%Y-%m-%d_%H-%M") + ".h264"
+
+    camera.start_recording(output_filename)
+    camera.wait_recording(recording_length)  # 1 minute = 60 seconds
     camera.stop_recording()
+
+    time.sleep(2)
+
+    print(f"Recorded {i} minutes of footage.")
     
