@@ -1,5 +1,4 @@
 name: Deploying scripts
-
 on:
   - push
 

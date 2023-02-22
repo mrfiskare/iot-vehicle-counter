@@ -1,7 +1,7 @@
 name: Record video
-
 on:
-  - push
+  schedule:
+    - cron: "0 7 * * *"
 
 jobs:
   ssh-key-action:
@@ -22,11 +22,11 @@ jobs:
         # port: 12399
         run: ssh-keyscan -p ${{ secrets.PORT }} -H ${{ secrets.HOST }}  >> ~/.ssh/known_hosts
 
-      - name: SSH -> removing old video files
+      - name: SSH -> running video recorder script
         uses: fifsky/ssh-action@master
         with:
           command: |
-            rm -rfv /home/pi/cam_output/*
+            python3 /home/pi/scripts/record-video-python.py
           host: ${{ secrets.HOST }}
           user: ${{ secrets.USER }}
           port: ${{ secrets.PORT }}

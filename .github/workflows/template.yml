@@ -1,5 +1,4 @@
 name: Action template
-
 on:
   - push
 
