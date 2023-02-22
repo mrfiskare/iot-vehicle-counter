@@ -1,5 +1,6 @@
 import time
 import picamera
+import os
 
 # Set up the PiCamera object
 
@@ -17,6 +18,13 @@ recording_length = 60 * 1
 # Set the output directory
 
 output_directory = "/home/pi/cam_output/"
+
+# Iterate over the files in the directory and remove each file
+
+for file_name in os.listdir(output_directory):
+    file_path = os.path.join(output_directory, file_name)
+    if os.path.isfile(file_path):
+        os.remove(file_path)
 
 # Record videos splitted into parts
 
