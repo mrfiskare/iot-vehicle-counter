@@ -12,11 +12,11 @@ camera.framerate = 15
 
 # Set the recording length (in seconds)
 
-recording_length = 60
+recording_length = 60 * 2
 
 # Set the output directory
 
-output_directory = "/home/pi/"
+output_directory = "/home/pi/cam_output"
 
 # Record 4 1-minute long videos
 
@@ -34,5 +34,5 @@ for i in range(4):
 
     time.sleep(2)
 
-    print(f"Recorded {i} minutes of footage.")
+    print(f"Recorded {i+1} minutes of footage.")
     
