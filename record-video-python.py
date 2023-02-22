@@ -3,7 +3,7 @@ import picamera
 
 # Set up the PiCamera object
 
-camera = PiCamera()
+camera = picamera.PiCamera()
 camera.resolution = (640, 640)
 camera.vflip = True
 camera.hflip = True
