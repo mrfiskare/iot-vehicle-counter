@@ -54,7 +54,7 @@ jobs:
           fingerprint: ${{ secrets.FINGERPRINT }}
           key: ${{ secrets.PRIVATE_KEY }}
           source: "./record-video-python.py"
-          target: "/home/pi/scripts/record-python.py"
+          target: "/home/pi/scripts/record-video-python.py"
 
       - name: SCP upload -> rename-split-files.sh
         uses: nicklasfrahm/scp-action@main
