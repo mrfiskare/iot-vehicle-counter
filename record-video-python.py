@@ -3,6 +3,31 @@ import picamera
 import os
 import psutil
 
+# Set up the PiCamera object
+
+camera = picamera.PiCamera()
+camera.resolution = (640, 640)
+camera.vflip = True
+camera.hflip = True
+camera.zoom=(0.3,0.3,0.7,0.7)
+camera.framerate = 15
+
+# Set the recording length (in seconds)
+
+recording_length = 60 * 1
+
+# Set the output directory
+
+output_directory = "/home/pi/cam_output/"
+
+# Iterate over the files in the directory and remove each file
+
+for file_name in os.listdir(output_directory):
+    file_path = os.path.join(output_directory, file_name)
+    if os.path.isfile(file_path):
+        os.remove(file_path)
+        print(f"Removed {output_directory+file_name}")
+
 # Get the available space on the root partition in bytes
 
 available_space = psutil.disk_usage('/').free
@@ -19,31 +44,6 @@ if available_space_gb < 10:
     print("Error: Not enough free space on the machine!")
 
 else:
-
-    # Set up the PiCamera object
-
-    camera = picamera.PiCamera()
-    camera.resolution = (640, 640)
-    camera.vflip = True
-    camera.hflip = True
-    camera.zoom=(0.3,0.3,0.7,0.7)
-    camera.framerate = 15
-
-    # Set the recording length (in seconds)
-
-    recording_length = 60 * 1
-
-    # Set the output directory
-
-    output_directory = "/home/pi/cam_output/"
-
-    # Iterate over the files in the directory and remove each file
-
-    for file_name in os.listdir(output_directory):
-        file_path = os.path.join(output_directory, file_name)
-        if os.path.isfile(file_path):
-            os.remove(file_path)
-            print(f"Removed {output_directory+file_name}")
 
     # Record videos splitted into parts
 
