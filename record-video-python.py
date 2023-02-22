@@ -1,5 +1,5 @@
-from picamera import PiCamera
-from time import sleep
+import time
+import picamera
 
 # Set up the PiCamera object
 
@@ -27,6 +27,7 @@ output_directory = "/home/pi/"
 file_name = output_directory + 'video_{:02d}.h264'
 
 for i in range(4):
+
     camera.start_recording(file_name.format(i))
     camera.wait_recording(60)  # 1 minute = 60 seconds
     camera.stop_recording()
