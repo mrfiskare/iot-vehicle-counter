@@ -1,23 +1,23 @@
-name: Deploying shell scripts
+name: Deploying scripts
 
 on:
   - push
 
 jobs:
   ssh-key-action:
-    name: Deploying shell scripts
+    name: Deploying scripts
     runs-on: ubuntu-latest
     steps:
-      - name: Check out repository
+      - name: repo checkout
         uses: actions/checkout@master
         
-      - name: Install SSH Key
+      - name: SSH -> installing ssh key
         uses: shimataro/ssh-key-action@v2.5.0
         with:
           key: ${{ secrets.PRIVATE_KEY }} 
           known_hosts: unnecessary
           
-      - name: Adding Known Hosts
+      - name: SSH -> adding remote to known hosts
         # port: 12399
         run: ssh-keyscan -p ${{ secrets.PORT }} -H ${{ secrets.HOST }}  >> ~/.ssh/known_hosts
 
