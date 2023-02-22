@@ -21,7 +21,7 @@ jobs:
         # port: 12399
         run: ssh-keyscan -p ${{ secrets.PORT }} -H ${{ secrets.HOST }}  >> ~/.ssh/known_hosts
 
-      - name: SSH command runner
+      - name: SSH -> removing old scripts
         uses: fifsky/ssh-action@master
         with:
           command: |
