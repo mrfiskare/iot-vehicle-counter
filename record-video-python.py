@@ -8,7 +8,7 @@ camera.resolution = (640, 640)
 camera.vflip = True
 camera.hflip = True
 camera.zoom=(0.3,0.3,0.7,0.7)
-camera.framerate = 15
+# camera.framerate = 15
 
 # Set the recording length (in seconds)
 
