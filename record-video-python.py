@@ -8,19 +8,19 @@ camera.resolution = (640, 640)
 camera.vflip = True
 camera.hflip = True
 camera.zoom=(0.3,0.3,0.7,0.7)
-# camera.framerate = 15
+camera.framerate = 30
 
 # Set the recording length (in seconds)
 
-recording_length = 60 * 2
+recording_length = 60 * 1
 
 # Set the output directory
 
-output_directory = "/home/pi/cam_output"
+output_directory = "/home/pi/cam_output/"
 
 # Record videos splitted into parts
 
-for i in range(4):
+for i in range(3):
 
     # Set the output filename to the current timestamp
 
@@ -32,5 +32,5 @@ for i in range(4):
 
     time.sleep(2)
 
-    print(f"Recorded {i+1} minutes of footage.")
+    print(f"Recorded {i+1} minutes of footage at {camera.framerate}FPS.")
     
