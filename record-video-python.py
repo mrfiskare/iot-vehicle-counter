@@ -43,7 +43,7 @@ else:
         file_path = os.path.join(output_directory, file_name)
         if os.path.isfile(file_path):
             os.remove(file_path)
-            print(f"Removed {output_directory+file_name}.")
+            print(f"Removed {output_directory+file_name}")
 
     # Record videos splitted into parts
 
