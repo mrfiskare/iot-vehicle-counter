@@ -1,10 +1,15 @@
-import picamera
-import time
+from picamera import PiCamera
+from time import sleep
 
-with picamera.PiCamera() as camera:
+camera = PiCamera()
+camera.resolution = (640, 640)
+camera.vflip = True
+camera.framerate = 15
 
-    camera.resolution = (640, 640)
-    camera.vflip = True
-    time.sleep(2)
-    camera.capture("/home/pi/img.jpg")
-    print("Done.")
+# Record 4 1-minute long videos
+file_name = '/home/pi/video_{:02d}.h264'
+for i in range(4):
+    camera.start_recording(file_name.format(i))
+    camera.wait_recording(60)  # 1 minute = 60 seconds
+    camera.stop_recording()
+    
