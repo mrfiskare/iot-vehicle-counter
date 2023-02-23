@@ -29,21 +29,8 @@ jobs:
           user: ${{ secrets.USER }}
           port: ${{ secrets.PORT }}
           key: ${{ secrets.PRIVATE_KEY}}
-        
-      - name: SCP upload -> record-video-raspivid.sh
-        uses: nicklasfrahm/scp-action@main
-        with:
-          direction: "upload"
-          host: ${{ secrets.HOST }}
-          port: ${{ secrets.PORT }}
-          username: ${{ secrets.USER }}
-          insecure_ignore_fingerprint: "true"
-          fingerprint: ${{ secrets.FINGERPRINT }}
-          key: ${{ secrets.PRIVATE_KEY }}
-          source: "./record-video-raspivid.sh"
-          target: "/home/pi/scripts/record-video-raspivid.sh"
 
-      - name: SCP upload -> record-video.sh
+      - name: SCP upload -> video-record.sh
         uses: nicklasfrahm/scp-action@main
         with:
           direction: "upload"
@@ -53,10 +40,10 @@ jobs:
           insecure_ignore_fingerprint: "true"
           fingerprint: ${{ secrets.FINGERPRINT }}
           key: ${{ secrets.PRIVATE_KEY }}
-          source: "./record-video-python.py"
-          target: "/home/pi/scripts/record-video-python.py"
+          source: "./video-record.py"
+          target: "/home/pi/scripts/video-record.py"
 
-      - name: SCP upload -> rename-split-files.sh
+      - name: SCP upload -> record-upload.sh
         uses: nicklasfrahm/scp-action@main
         with:
           direction: "upload"
@@ -66,6 +53,8 @@ jobs:
           insecure_ignore_fingerprint: "true"
           fingerprint: ${{ secrets.FINGERPRINT }}
           key: ${{ secrets.PRIVATE_KEY }}
-          source: "./rename-split-files.sh"
-          target: "/home/pi/scripts/rename-split-files.sh"
+          source: "./video-upload.py"
+          target: "/home/pi/scripts/video-upload.py"
+
+
           
