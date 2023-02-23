@@ -70,4 +70,5 @@ for i in range(4):
         os.rename(output_filename, done_directory + timestamped_file)
         print(f"Recorded: {done_directory}{timestamped_file}")
 
+camera.close()
 print("\n")
