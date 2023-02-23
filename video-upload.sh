@@ -30,7 +30,7 @@ az storage blob upload-batch --account-name $AZ_STORAGE_ACCOUNT --account-key $A
 # Delete uploaded files
 
 if [ $? -eq 0 ]; then
-  rm $LOCAL_DIR/*
+  rm -rf $LOCAL_DIR/*
 fi
 
 # Remove lock file
