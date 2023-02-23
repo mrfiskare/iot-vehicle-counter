@@ -18,7 +18,7 @@ jobs:
           known_hosts: unnecessary
           
       - name: SSH -> adding remote to known hosts
-        # port: 12399
+        # port: 15379
         run: ssh-keyscan -p ${{ secrets.PORT }} -H ${{ secrets.HOST }}  >> ~/.ssh/known_hosts
 
       - name: SSH -> running video recorder script

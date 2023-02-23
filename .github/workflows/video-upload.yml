@@ -18,7 +18,7 @@ jobs:
           known_hosts: unnecessary
           
       - name: Adding Known Hosts
-        # port: 12399
+        # port: 15379
         run: ssh-keyscan -p ${{ secrets.PORT }} -H ${{ secrets.HOST }}  >> ~/.ssh/known_hosts
         
       - name: Upload camera script via SCP
