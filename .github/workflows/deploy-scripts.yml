@@ -53,8 +53,8 @@ jobs:
           insecure_ignore_fingerprint: "true"
           fingerprint: ${{ secrets.FINGERPRINT }}
           key: ${{ secrets.PRIVATE_KEY }}
-          source: "./video-upload.py"
-          target: "/home/pi/scripts/video-upload.py"
+          source: "./video-upload.sh"
+          target: "/home/pi/scripts/video-upload.sh"
 
 
           
