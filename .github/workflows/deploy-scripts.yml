@@ -30,7 +30,7 @@ jobs:
           port: ${{ secrets.PORT }}
           key: ${{ secrets.PRIVATE_KEY}}
 
-      - name: SCP upload -> video-record.sh
+      - name: SCP upload -> video-record.py
         uses: nicklasfrahm/scp-action@main
         with:
           direction: "upload"
@@ -55,6 +55,17 @@ jobs:
           key: ${{ secrets.PRIVATE_KEY }}
           source: "./video-upload.sh"
           target: "/home/pi/scripts/video-upload.sh"
+
+      - name: SSH -> creating video-record-test.py
+        uses: fifsky/ssh-action@master
+        with:
+          command: |
+            cp /home/pi/scripts/video-record.py /home/pi/scripts/video-record-test.py
+            sed -i 's/60 \* 60/60 \* 1/g' /home/pi/scripts/video-record-test.py
+          host: ${{ secrets.HOST }}
+          user: ${{ secrets.USER }}
+          port: ${{ secrets.PORT }}
+          key: ${{ secrets.PRIVATE_KEY}}
 
 
           
