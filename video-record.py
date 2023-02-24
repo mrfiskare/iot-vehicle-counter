@@ -16,7 +16,7 @@ camera.framerate = 15
 
 # Set the recording length (in seconds)
 
-recording_length = 60 * 60
+recording_length = 60 * 1
 
 # Set the output directories
 
