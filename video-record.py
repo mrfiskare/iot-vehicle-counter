@@ -71,4 +71,5 @@ for i in range(4):
         print(f"Recorded: {done_directory}{timestamped_file}")
 
 camera.close()
+time.sleep(5)
 print("\n")
