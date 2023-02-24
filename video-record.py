@@ -68,7 +68,7 @@ for i in range(4):
         # Move the file to the captured folder
 
         os.rename(output_filename, done_directory + timestamped_file)
-        print(f"Recorded: {done_directory}{timestamped_file}")
+        print(f"Recorded: {done_directory}{timestamped_file}", file=sys.stdout, flush=True)
 
 camera.close()
 time.sleep(5)

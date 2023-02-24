@@ -7,7 +7,6 @@ jobs:
   ssh-key-action:
     name: Video record
     runs-on: ubuntu-latest
-    sudo: true
     steps:
       - name: repo checkout
         uses: actions/checkout@master
