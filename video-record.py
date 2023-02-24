@@ -45,7 +45,7 @@ for i in range(4):
 
     available_space = psutil.disk_usage('/').free
     available_space_gb = available_space / (1024 ** 3)
-    print(f"\nAvailable space: {available_space_gb:.2f} GB")
+    print(f"\nAvailable space: {available_space_gb:.2f} GB", file=sys.stdout, flush=True)
 
     # Check if available space is at least 10 GB
 
