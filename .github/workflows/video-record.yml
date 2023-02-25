@@ -25,7 +25,7 @@ jobs:
         uses: fifsky/ssh-action@master
         with:
           command: |
-            nohup python3 /home/pi/scripts/video-record-test.py &
+            python3 /home/pi/scripts/video-record-test.py > log.txt &
           host: ${{ secrets.HOST }}
           user: ${{ secrets.USER }}
           port: ${{ secrets.PORT }}
