@@ -5,7 +5,7 @@ on:
 jobs:
   ssh-key-action:
     name: Video record
-    if: ${{ false }}
+    # if: ${{ false }}
     runs-on: ubuntu-latest
     steps:
       - name: repo checkout
