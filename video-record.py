@@ -7,6 +7,7 @@ import psutil
 import shutil
 
 # Unload the bcm2835-v4l2 driver
+
 subprocess.run(["sudo", "modprobe", "-r", "bcm2835-v4l2"])
 time.sleep(2)
 subprocess.run(["sudo", "modprobe", "bcm2835-v4l2"])
