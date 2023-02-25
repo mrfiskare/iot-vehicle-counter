@@ -11,12 +11,12 @@ camera = picamera.PiCamera()
 camera.resolution = (640, 640)
 camera.vflip = True
 camera.hflip = True
-camera.zoom=(0.3,0.3,0.7,0.7)
+camera.zoom=(0.3,0.4,0.7,0.5)
 camera.framerate = 15
 
 # Set the recording length (in seconds)
 
-recording_length = 60 * 1
+recording_length = 60 * 60
 
 # Set the output directories
 
@@ -39,7 +39,7 @@ if not os.path.exists(done_directory) :
 
 # Record videos splitted into parts
 
-for i in range(4):
+for i in range(1):
 
     # Get the available space on the root partition in GB
 

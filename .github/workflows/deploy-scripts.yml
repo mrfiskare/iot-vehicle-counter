@@ -61,7 +61,7 @@ jobs:
         with:
           command: |
             cp /home/pi/scripts/video-record.py /home/pi/scripts/video-record-test.py
-            sed -i 's/60 \* 60/60 \* 1/g' /home/pi/scripts/video-record-test.py
+            sed -i 's/60 \* 60/10 \* 1/g' /home/pi/scripts/video-record-test.py
           host: ${{ secrets.HOST }}
           user: ${{ secrets.USER }}
           port: ${{ secrets.PORT }}
