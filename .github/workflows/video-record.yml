@@ -26,10 +26,6 @@ jobs:
         uses: fifsky/ssh-action@master
         with:
           command: |
-            sudo modprobe -r bcm2835-v4l2
-            sleep 2
-            sudo modprobe -r bcm2835-v4l2
-            sleep 2
             python3 /home/pi/scripts/video-record.py
           host: ${{ secrets.HOST }}
           user: ${{ secrets.USER }}

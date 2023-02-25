@@ -1,18 +1,25 @@
 import sys
 import time
+import subprocess
 import picamera
 import os
 import psutil
 import shutil
 
+# Unload the bcm2835-v4l2 driver
+subprocess.run(["sudo", "modprobe", "-r", "bcm2835-v4l2"])
+time.sleep(2)
+subprocess.run(["sudo", "modprobe", "bcm2835-v4l2"])
+time.sleep(2)
+
 # Set up the PiCamera object
 
 camera = picamera.PiCamera()
-camera.resolution = (640, 640)
+camera.resolution = (640, 480)
 camera.vflip = True
 camera.hflip = True
-camera.zoom=(0.3,0.4,0.7,0.5)
-camera.framerate = 15
+camera.zoom=(0.3,0.4,0.65,0.45)
+camera.framerate = 10
 
 # Set the recording length (in seconds)
 
