@@ -1,11 +1,12 @@
 name: Video record
 on:
-  - push
+  schedule:
+    - cron: "0 11-16 * * *"
 
 jobs:
   ssh-key-action:
     name: Video record
-    # if: ${{ false }}
+    if: ${{ false }}
     runs-on: ubuntu-latest
     steps:
       - name: repo checkout
@@ -25,7 +26,7 @@ jobs:
         uses: fifsky/ssh-action@master
         with:
           command: |
-            python3 /home/pi/scripts/video-record-test.py > /home/pi/scripts/log.txt &
+            python3 /home/pi/scripts/video-record.py > /home/pi/scripts/log.txt &
           host: ${{ secrets.HOST }}
           user: ${{ secrets.USER }}
           port: ${{ secrets.PORT }}
