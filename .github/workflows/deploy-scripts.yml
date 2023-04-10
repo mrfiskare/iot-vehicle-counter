@@ -43,6 +43,19 @@ jobs:
           source: "./video-record.py"
           target: "/home/pi/scripts/video-record.py"
 
+      - name: SCP upload -> video-export-frames.sh
+        uses: nicklasfrahm/scp-action@main
+        with:
+          direction: "upload"
+          host: ${{ secrets.HOST }}
+          port: ${{ secrets.PORT }}
+          username: ${{ secrets.USER }}
+          insecure_ignore_fingerprint: "true"
+          fingerprint: ${{ secrets.FINGERPRINT }}
+          key: ${{ secrets.PRIVATE_KEY }}
+          source: "./video-export-frames.sh"
+          target: "/home/pi/scripts/video-export-frames.sh"
+
       - name: SCP upload -> record-upload.sh
         uses: nicklasfrahm/scp-action@main
         with:
