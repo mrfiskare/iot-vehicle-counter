@@ -72,11 +72,19 @@ for i in range(8):
         camera.wait_recording(recording_length)
         camera.stop_recording()
         time.sleep(2)
+
+        # Convert the file to MP4 format using ffmpeg
+        mp4_filename = output_filename.replace(".h264", ".mp4")
+        mp4_timestamped_file = output_filename.replace(".h264", ".mp4")
+        subprocess.run(["ffmpeg", "-i", output_filename, "-vcodec", "copy", mp4_filename])
+
+        # Delete the H.264 file
+        os.remove(output_filename)
         
         # Move the file to the captured folder
 
-        os.rename(output_filename, done_directory + timestamped_file)
-        print(f"Recorded: {done_directory}{timestamped_file}", file=sys.stdout, flush=True)
+        os.rename(mp4_filename, done_directory + mp4_timestamped_file)
+        print(f"Recorded: {done_directory}{mp4_timestamped_file}", file=sys.stdout, flush=True)
 
 camera.close()
 time.sleep(5)
