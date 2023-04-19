@@ -74,7 +74,7 @@ for i in range(8):
         time.sleep(2)
 
         # Convert the file to MP4 format using ffmpeg
-        mp4_filename = timestamped_file.replace(".h264", ".mp4")
+        mp4_filename = output_filename.replace(".h264", ".mp4")
         mp4_output_filename = output_filename.replace(".h264", ".mp4")
         subprocess.run(["ffmpeg", "-i", output_filename, "-vcodec", "copy", mp4_output_filename])
 
