@@ -76,7 +76,7 @@ for i in range(8):
         # Convert the file to MP4 format using ffmpeg
         mp4_filename = timestamped_file.replace(".h264", ".mp4")
         mp4_output_filename = output_filename.replace(".h264", ".mp4")
-        subprocess.run(["ffmpeg", "-i", output_filename, "-vcodec", "copy", mp4_output_filename])
+        subprocess.run(["ffmpeg", "-i", output_filename, "-vcodec", "copy",  "-r", "10", mp4_output_filename])
 
         # Delete the H.264 file
         os.remove(output_filename)
