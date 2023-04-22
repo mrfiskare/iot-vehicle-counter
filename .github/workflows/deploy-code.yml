@@ -1,10 +1,10 @@
-name: Deploying scripts
+name: Deploying Python code
 on:
   - push
 
 jobs:
   ssh-key-action:
-    name: Deploying scripts
+    name: Deploying Python code
     runs-on: ubuntu-latest
     steps:
       - name: repo checkout
@@ -24,7 +24,8 @@ jobs:
         uses: fifsky/ssh-action@master
         with:
           command: |
-            touch /home/pi/hellowooooorld.txt
+            cd /home/pi/git
+            gh repo sync pte-yolo-node
           host: ${{ secrets.HOST }}
           user: ${{ secrets.USER }}
           port: ${{ secrets.PORT }}
