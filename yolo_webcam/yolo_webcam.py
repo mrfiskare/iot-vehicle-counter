@@ -52,7 +52,7 @@ while True:
 
             # Printing the confidence and class name to the terminal and bounding box
 
-            print(f'class: {cls} ({conf})')
+            print(f'class: {classNames[cls]} {conf}')
             cvzone.putTextRect(img, f'{classNames[cls]} {conf}',
                                (max(0, x1), max(30, y1)),
                                scale = 1, thickness = 1)
