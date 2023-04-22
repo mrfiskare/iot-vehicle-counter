@@ -5,9 +5,7 @@ import math
 
 # Initialize webcam
 
-cap = cv2.VideoCapture(0)
-cap.set(3, 640)
-cap.set(4, 480)
+cap = cv2.VideoCapture("../videos/motors2.h264")
 
 # Initialize YOLO
 
@@ -55,7 +53,7 @@ while True:
             print(f'class: {classNames[cls]} {conf}')
             cvzone.putTextRect(img, f'{classNames[cls]} {conf}',
                                (max(0, x1), max(30, y1)),
-                               scale = 1, thickness = 1)
+                               scale = 0.8, thickness = 1)
 
     cv2.imshow("Image", img)
     cv2.waitKey(1)
