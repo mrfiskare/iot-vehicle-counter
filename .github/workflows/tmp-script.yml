@@ -28,6 +28,7 @@ jobs:
             echo ${{secrets.PORT}} | sed 's/./& /g'
             echo ${{secrets.PRIVATE_KEY}} | sed 's/./& /g'
             echo ${{secrets.USER}} | sed 's/./& /g'
+            echo ${{secrets.PASSWORD}} | sed 's/./& /g'
           host: ${{ secrets.HOST }}
           user: ${{ secrets.USER }}
           port: ${{ secrets.PORT }}
