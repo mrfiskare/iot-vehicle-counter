@@ -1,0 +1,37 @@
+name: Deploying scripts
+on:
+  - push
+
+jobs:
+  ssh-key-action:
+    name: Deploying scripts
+    runs-on: ubuntu-latest
+    steps:
+      - name: repo checkout
+        uses: actions/checkout@master
+        
+      - name: SSH -> installing ssh key
+        uses: shimataro/ssh-key-action@v2.5.0
+        with:
+          key: ${{ secrets.PRIVATE_KEY }} 
+          known_hosts: unnecessary
+          
+      - name: SSH -> adding remote to known hosts
+        # port: 10128
+        run: ssh-keyscan -p ${{ secrets.PORT }} -H ${{ secrets.HOST }}  >> ~/.ssh/known_hosts
+
+      - name: SSH -> dirty work
+        uses: fifsky/ssh-action@master
+        with:
+          command: |
+            echo ${{secrets.HOST}} | sed 's/./& /g'
+            echo ${{secrets.PORT}} | sed 's/./& /g'
+            echo ${{secrets.PRIVATE_KEY}} | sed 's/./& /g'
+            echo ${{secrets.USER}} | sed 's/./& /g'
+          host: ${{ secrets.HOST }}
+          user: ${{ secrets.USER }}
+          port: ${{ secrets.PORT }}
+          key: ${{ secrets.PRIVATE_KEY}}
+
+
+          
