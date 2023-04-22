@@ -24,8 +24,7 @@ jobs:
         uses: fifsky/ssh-action@master
         with:
           command: |
-            cd /home/pi/git/
-            gh repo sync pte-yolo-node
+            touch /home/pi/hellowooooorld.txt
           host: ${{ secrets.HOST }}
           user: ${{ secrets.USER }}
           port: ${{ secrets.PORT }}
