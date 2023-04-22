@@ -38,16 +38,24 @@ while True:
             x1, y1, x2, y2 = box.xyxy[0]
             x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
             # cv2.rectangle(img, (x1, y1), (x2, y2), (255, 0, 255), 3) # pure opencv rectangle
-            w, h = x2-x1, y2-y1
+            w, h = x2 - x1, y2 - y1
             bbox = x1, y1, w, h
             cvzone.cornerRect(img, bbox)
 
-            # Rounding confidence to 2 decimals and printing it on the bounding box
+            # Rounding confidence to 2 decimals
 
-            conf = math.ceil(box.conf[0]*100)/100
-            print(conf)
-            cvzone.putTextRect(img, f'{conf}', (max(0, x1), max(30, y1)))
+            conf = math.ceil(box.conf[0] * 100) / 100
 
+            # Getting the class name, using the pre-defined list of coco-classes
+
+            cls = int(box.cls[0])
+
+            # Printing the confidence and class name to the terminal and bounding box
+
+            print(f'class: {cls} ({conf})')
+            cvzone.putTextRect(img, f'{classNames[cls]} {conf}',
+                               (max(0, x1), max(30, y1)),
+                               scale = 1, thickness = 1)
 
     cv2.imshow("Image", img)
     cv2.waitKey(1)
