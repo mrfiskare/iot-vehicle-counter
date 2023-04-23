@@ -30,6 +30,12 @@ vehicleTypes = ["car", "motorbike", "bus", "truck"]
 
 tracker = Sort(max_age=20, min_hits=3, iou_threshold=0.3)
 
+# Line positions
+
+limits = [400, 0, 400, 480]
+offset = 20
+totalCount = 0
+
 
 def calculate_w_h(x_1, y_1, x_2, y_2):
     width = x_2 - x_1
@@ -71,7 +77,7 @@ while True:
 
                     # Showing detection bounding box, conf. and class name (commented out)
 
-                    cvzone.cornerRect(img, bbox, l=8, t=2, rt=1)
+                    # cvzone.cornerRect(img, bbox, l=8, t=2, rt=1)
                     # cvzone.putTextRect(img, f'{currentClass} {conf}',
                     #                    (max(0, x1), max(30, y1)),
                     #                    scale=0.8, thickness=1, offset=2)
@@ -85,6 +91,13 @@ while True:
     # Assigning tracking IDs to the detected objects
 
     resultsTracker = tracker.update(detections)
+
+    # Drawing the lines
+
+    cv2.line(img, (limits[0], limits[1]), (limits[2], limits[3]), (0, 0, 255), 2)
+    cv2.line(img, (limits[0] - offset, limits[1]), (limits[2] - offset, limits[3]), (153, 153, 255), 1)
+    cv2.line(img, (limits[0] + offset, limits[1]), (limits[2] + offset, limits[3]), (153, 153, 255), 1)
+
     for results in resultsTracker:
 
         # Getting rect. data from the result
@@ -99,6 +112,18 @@ while True:
         cvzone.putTextRect(img, f'{tracking_id}',
                            (max(0, t_x1), max(30, t_y1)),
                            scale=0.8, thickness=1, offset=2)
+
+        # Center points
+
+        t_cx, t_cy = t_x1 + t_w // 2, t_y1 + t_h // 2
+        cv2.circle(img, (t_cx, t_cy), 3, (255, 0, 255), cv2.FILLED)
+
+        if limits[0] - offset < t_cx < limits[0] + offset:
+            totalCount += 1
+
+        cvzone.putTextRect(img, f'vehicle count: {totalCount}',
+                           (20, 420),
+                           scale=1.2, thickness=1, offset=2, colorR=(0, 0, 0))
 
     cv2.imshow("Object counter", img)
     cv2.waitKey(1)
