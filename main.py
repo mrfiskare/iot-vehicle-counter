@@ -1,11 +1,13 @@
+import numpy as np
 from ultralytics import YOLO
 import cv2
 import cvzone
 import math
+from sort import *
 
 # Initialize webcam
 
-cap = cv2.VideoCapture("videos/big_truck3.h264")
+cap = cv2.VideoCapture("videos/7_cars.h264")
 
 # Initialize YOLO
 
@@ -24,9 +26,14 @@ classNames = ["person", "bicycle", "car", "motorbike", "aeroplane", "bus",
               "vase", "scissors", "teddy bear", "hair drier", "toothbrush"]
 vehicleTypes = ["car", "motorbike", "bus", "truck"]
 
+# Tracking using sort by abewley
+
+tracker = Sort(max_age=10, min_hits=3, iou_threshold=0.3)
+
 while True:
     success, img = cap.read()
     results = model(img, stream=True)
+    detections = np.empty((0, 5))
 
     for r in results:
 
@@ -43,7 +50,7 @@ while True:
 
             conf = math.ceil(box.conf[0] * 100) / 100
 
-            # Getting the class name, using the pre-defined list of coco-classes
+            # Getting the class name, using the pre-defined array of coco-classes
 
             cls = int(box.cls[0])
             currentClass = classNames[cls]
@@ -54,11 +61,26 @@ while True:
             if conf > 0.3:
 
                 if currentClass in vehicleTypes:
+
+                    # Printing information
+
                     print(f'class: {currentClass} {conf}')
                     cvzone.cornerRect(img, bbox, l=8, t=2)
                     cvzone.putTextRect(img, f'{currentClass} {conf}',
                                        (max(0, x1), max(30, y1)),
                                        scale=0.8, thickness=1, offset=2)
+
+                    # Adding the detected objects to the detections array
+
+                    currentArray = np.array([x1,y1,x2,y2,conf])
+                    detections = np.vstack((detections, currentArray))
+
+    # Assigning tracking IDs to the detected objects
+
+    resultsTracker = tracker.update(detections)
+    for results in resultsTracker:
+        x1, y1, x2, y2, id = results
+        print(results)
 
     cv2.imshow("Image", img)
     cv2.waitKey(1)
