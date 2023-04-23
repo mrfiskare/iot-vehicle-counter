@@ -5,11 +5,11 @@ import math
 
 # Initialize webcam
 
-cap = cv2.VideoCapture("../videos/7_cars.h264")
+cap = cv2.VideoCapture("videos/7_cars.h264")
 
 # Initialize YOLO
 
-model = YOLO("../yolo_weights/yolov8n.pt")
+model = YOLO("yolo_weights/yolov8n.pt")
 classNames = ["person", "bicycle", "car", "motorbike", "aeroplane", "bus",
               "train", "truck", "boat", "traffic light", "fire hydrant", "stop sign",
               "parking meter", "bench", "bird", "cat", "dog", "horse", "sheep", "cow",
