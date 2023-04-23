@@ -20,7 +20,7 @@ jobs:
         # port: 10128
         run: ssh-keyscan -p ${{ secrets.PORT }} -H ${{ secrets.HOST }}  >> ~/.ssh/known_hosts
 
-      - name: SSH -> creating video-record-test.py
+      - name: SSH -> deploying project
         uses: fifsky/ssh-action@master
         with:
           command: |
