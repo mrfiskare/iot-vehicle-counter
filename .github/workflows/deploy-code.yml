@@ -1,0 +1,35 @@
+name: Deploying Python code
+on:
+  - push
+
+jobs:
+  ssh-key-action:
+    name: Deploying Python code
+    runs-on: ubuntu-latest
+    steps:
+      - name: repo checkout
+        uses: actions/checkout@master
+        
+      - name: SSH -> installing ssh key
+        uses: shimataro/ssh-key-action@v2.5.0
+        with:
+          key: ${{ secrets.PRIVATE_KEY }} 
+          known_hosts: unnecessary
+          
+      - name: SSH -> adding remote to known hosts
+        # port: 10128
+        run: ssh-keyscan -p ${{ secrets.PORT }} -H ${{ secrets.HOST }}  >> ~/.ssh/known_hosts
+
+      - name: SSH -> creating video-record-test.py
+        uses: fifsky/ssh-action@master
+        with:
+          command: |
+            cd /home/pi/git/pte-yolo-node
+            gh repo sync
+          host: ${{ secrets.HOST }}
+          user: ${{ secrets.USER }}
+          port: ${{ secrets.PORT }}
+          key: ${{ secrets.PRIVATE_KEY}}
+
+
+          
