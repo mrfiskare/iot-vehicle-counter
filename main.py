@@ -5,7 +5,7 @@ import math
 
 # Initialize webcam
 
-cap = cv2.VideoCapture("videos/7_cars.h264")
+cap = cv2.VideoCapture("videos/big_truck3.h264")
 
 # Initialize YOLO
 
@@ -22,6 +22,7 @@ classNames = ["person", "bicycle", "car", "motorbike", "aeroplane", "bus",
               "toilet", "tvmonitor", "laptop", "mouse", "remote", "keyboard", "cell phone",
               "microwave", "oven", "toaster", "sink", "refrigerator", "book", "clock",
               "vase", "scissors", "teddy bear", "hair drier", "toothbrush"]
+vehicleTypes = ["car", "motorbike", "bus", "truck"]
 
 while True:
     success, img = cap.read()
@@ -29,7 +30,7 @@ while True:
 
     for r in results:
 
-        # Drawing bounding boxes around objects with cvzone
+        # Drawing bounding boxes around specified objects with cvzone
 
         boxes = r.boxes
         for box in boxes:
@@ -37,7 +38,6 @@ while True:
             x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
             w, h = x2 - x1, y2 - y1
             bbox = x1, y1, w, h
-            cvzone.cornerRect(img, bbox)
 
             # Rounding confidence to 2 decimals
 
@@ -46,13 +46,19 @@ while True:
             # Getting the class name, using the pre-defined list of coco-classes
 
             cls = int(box.cls[0])
+            currentClass = classNames[cls]
 
-            # Printing the confidence and class name to the terminal and bounding box
+            # If the conf. level is high enough, printing the conf. and class name
+            # to the terminal and bounding box for selected classes
 
-            print(f'class: {classNames[cls]} {conf}')
-            cvzone.putTextRect(img, f'{classNames[cls]} {conf}',
-                               (max(0, x1), max(30, y1)),
-                               scale = 0.8, thickness = 1)
+            if conf > 0.3:
+
+                if currentClass in vehicleTypes:
+                    print(f'class: {currentClass} {conf}')
+                    cvzone.cornerRect(img, bbox, l=8, t=2)
+                    cvzone.putTextRect(img, f'{currentClass} {conf}',
+                                       (max(0, x1), max(30, y1)),
+                                       scale=0.8, thickness=1, offset=2)
 
     cv2.imshow("Image", img)
     cv2.waitKey(1)
