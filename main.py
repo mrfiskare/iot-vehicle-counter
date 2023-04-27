@@ -7,7 +7,7 @@ from sort import *
 
 # Initialize webcam
 
-cap = cv2.VideoCapture("videos/7_cars.h264")
+cap = cv2.VideoCapture("videos/motors2.h264")
 
 # Initialize YOLO
 
@@ -39,11 +39,11 @@ truckTracker = Sort(max_age=maxAge, min_hits=minHits, iou_threshold=iouThreshold
 # Line positions
 
 linePosition = [400, 0, 400, 480]
-offset = 20
-carCount = 0
-motorbikeCount = 0
-busCount = 0
-truckCount = 0
+offset = 30
+carCount = []
+motorbikeCount = []
+busCount = []
+truckCount = []
 
 
 def calculate_w_h(x_1, y_1, x_2, y_2):
@@ -54,6 +54,8 @@ def calculate_w_h(x_1, y_1, x_2, y_2):
 
 def update_tracker(tracker, detections, count, type):
     tracker_results = tracker.update(detections)
+
+    print(f'update tracker with {type}')
 
     for tracked_object in tracker_results:
 
@@ -69,14 +71,18 @@ def update_tracker(tracker, detections, count, type):
         cvzone.putTextRect(img, f'[{tracking_id}] {type}',
                            (max(0, t_x1), max(30, t_y1)),
                            scale=0.8, thickness=1, offset=2, colorR=(0, 0, 102))
+        print(f'tracking rect for {type}')
 
         # Center points
 
         t_cx, t_cy = t_x1 + t_w // 2, t_y1 + t_h // 2
         cv2.circle(img, (t_cx, t_cy), 3, (255, 0, 255), cv2.FILLED)
 
+        # Increase the counter if the id has not been counted before
+
         if linePosition[0] - offset < t_cx < linePosition[0] + offset:
-            count += 1
+            if count.count(tracking_id) == 0:
+                count.append(tracking_id)
 
     return count
 
@@ -119,24 +125,37 @@ while True:
 
             if conf > 0.3:
 
+                cvzone.cornerRect(img, bbox, l=8, t=2, rt=1)
+                cvzone.putTextRect(img, f'{currentClass}',
+                                   (max(0, x1), max(30, y1)),
+                                   scale=0.8, thickness=1, offset=2)
+
                 if currentClass == "car":
                     carDetections = np.vstack((carDetections, currentArray))
+                    print("current class: car")
+                    carCount = update_tracker(carTracker, carDetections, carCount, "car")
 
                 if currentClass == "motorbike":
                     carDetections = np.vstack((motorbikeDetections, currentArray))
+                    print("current class: motorbike")
+                    motorbikeCount = update_tracker(motorbikeTracker, motorbikeDetections, motorbikeCount, "motorbike")
 
                 if currentClass == "bus":
                     carDetections = np.vstack((busDetections, currentArray))
+                    print("current class: bus")
+                    busCount = update_tracker(busTracker, busDetections, busCount, "bus")
 
                 if currentClass == "truck":
                     carDetections = np.vstack((truckDetections, currentArray))
+                    print("current class: truck")
+                    truckCount = update_tracker(truckTracker, truckDetections, truckCount, "truck")
 
     # Assigning tracking IDs to the detected objects
 
-    carCount = update_tracker(carTracker, carDetections, carCount, "car")
-    motorbikeCount = update_tracker(motorbikeTracker, motorbikeDetections, motorbikeCount, "motorbike")
-    busCount = update_tracker(busTracker, busDetections, busCount, "bus")
-    truckCount = update_tracker(truckTracker, truckDetections, truckCount, "truck")
+
+
+
+
 
     # Drawing the lines
 
@@ -148,10 +167,10 @@ while True:
 
     # Displaying counters
 
-    cvzone.putTextRect(img, f'car: {carCount}', (20, 400), scale=1.2, thickness=1, offset=2, colorR=(0, 0, 0))
-    cvzone.putTextRect(img, f'motorbike: {motorbikeCount}', (20, 420), scale=1.2, thickness=1, offset=2, colorR=(0, 0, 0))
-    cvzone.putTextRect(img, f'bus: {busCount}', (20, 440), scale=1.2, thickness=1, offset=2, colorR=(0, 0, 0))
-    cvzone.putTextRect(img, f'truck: {truckCount}', (20, 460), scale=1.2, thickness=1, offset=2, colorR=(0, 0, 0))
+    cvzone.putTextRect(img, f'car: {len(carCount)}', (20, 400), scale=1.2, thickness=1, offset=2, colorR=(0, 0, 0))
+    cvzone.putTextRect(img, f'motorbike: {len(motorbikeCount)}', (20, 420), scale=1.2, thickness=1, offset=2, colorR=(0, 0, 0))
+    cvzone.putTextRect(img, f'bus: {len(busCount)}', (20, 440), scale=1.2, thickness=1, offset=2, colorR=(0, 0, 0))
+    cvzone.putTextRect(img, f'truck: {len(truckCount)}', (20, 460), scale=1.2, thickness=1, offset=2, colorR=(0, 0, 0))
 
     cv2.imshow("Object counter", img)
-    cv2.waitKey(1)
+    cv2.waitKey(0)
