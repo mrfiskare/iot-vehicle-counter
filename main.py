@@ -24,17 +24,26 @@ classNames = ["person", "bicycle", "car", "motorbike", "aeroplane", "bus",
               "toilet", "tvmonitor", "laptop", "mouse", "remote", "keyboard", "cell phone",
               "microwave", "oven", "toaster", "sink", "refrigerator", "book", "clock",
               "vase", "scissors", "teddy bear", "hair drier", "toothbrush"]
-vehicleTypes = ["car", "motorbike", "bus", "truck"]
 
 # Initializing Sort tracker made by abewley
 
-tracker = Sort(max_age=20, min_hits=3, iou_threshold=0.3)
+maxAge = 20
+minHits = 3
+iouThreshold = 0.3
+
+carTracker = Sort(max_age=maxAge, min_hits=minHits, iou_threshold=iouThreshold)
+motorbikeTracker = Sort(max_age=maxAge, min_hits=minHits, iou_threshold=iouThreshold)
+busTracker = Sort(max_age=maxAge, min_hits=minHits, iou_threshold=iouThreshold)
+truckTracker = Sort(max_age=maxAge, min_hits=minHits, iou_threshold=iouThreshold)
 
 # Line positions
 
-limits = [400, 0, 400, 480]
+linePosition = [400, 0, 400, 480]
 offset = 20
-totalCount = 0
+carCount = 0
+motorbikeCount = 0
+busCount = 0
+truckCount = 0
 
 
 def calculate_w_h(x_1, y_1, x_2, y_2):
@@ -43,10 +52,43 @@ def calculate_w_h(x_1, y_1, x_2, y_2):
     return width, height
 
 
+def update_tracker(tracker, detections, count, type):
+    tracker_results = tracker.update(detections)
+
+    for tracked_object in tracker_results:
+
+        # Getting rect. data from the result
+
+        t_x1, t_y1, t_x2, t_y2, tracking_id = tracked_object
+        t_x1, t_y1, t_x2, t_y2, tracking_id = int(t_x1), int(t_y1), int(t_x2), int(t_y2), int(tracking_id)
+        t_w, t_h = calculate_w_h(t_x1, t_y1, t_x2, t_y2)
+
+        # Showing tracking bounding box, tracked object's id
+
+        cvzone.cornerRect(img, (t_x1, t_y1, t_w, t_h), l=8, t=2, rt=1, colorR=(255, 0, 0))
+        cvzone.putTextRect(img, f'[{tracking_id}] {type}',
+                           (max(0, t_x1), max(30, t_y1)),
+                           scale=0.8, thickness=1, offset=2, colorR=(0, 0, 102))
+
+        # Center points
+
+        t_cx, t_cy = t_x1 + t_w // 2, t_y1 + t_h // 2
+        cv2.circle(img, (t_cx, t_cy), 3, (255, 0, 255), cv2.FILLED)
+
+        if linePosition[0] - offset < t_cx < linePosition[0] + offset:
+            count += 1
+
+    return count
+
+
 while True:
     success, img = cap.read()
     results = model(img, stream=True)
-    detections = np.empty((0, 5))
+
+    carDetections = np.empty((0, 5))
+    motorbikeDetections = np.empty((0, 5))
+    busDetections = np.empty((0, 5))
+    truckDetections = np.empty((0, 5))
 
     for r in results:
 
@@ -68,62 +110,48 @@ while True:
             cls = int(box.cls[0])
             currentClass = classNames[cls]
 
+            # Defining the parameter for the sorting algorithm
+
+            currentArray = np.array([x1, y1, x2, y2, conf])
+
             # If the conf. level is high enough, printing the conf. and class name
             # to the terminal and bounding box for selected classes
 
             if conf > 0.3:
 
-                if currentClass in vehicleTypes:
+                if currentClass == "car":
+                    carDetections = np.vstack((carDetections, currentArray))
 
-                    # Showing detection bounding box, conf. and class name (commented out)
+                if currentClass == "motorbike":
+                    carDetections = np.vstack((motorbikeDetections, currentArray))
 
-                    # cvzone.cornerRect(img, bbox, l=8, t=2, rt=1)
-                    # cvzone.putTextRect(img, f'{currentClass} {conf}',
-                    #                    (max(0, x1), max(30, y1)),
-                    #                    scale=0.8, thickness=1, offset=2)
-                    # print(f'class: {currentClass} {conf}')
+                if currentClass == "bus":
+                    carDetections = np.vstack((busDetections, currentArray))
 
-                    # Adding the detected objects to the detections array
-
-                    currentArray = np.array([x1, y1, x2, y2, conf])
-                    detections = np.vstack((detections, currentArray))
+                if currentClass == "truck":
+                    carDetections = np.vstack((truckDetections, currentArray))
 
     # Assigning tracking IDs to the detected objects
 
-    resultsTracker = tracker.update(detections)
+    carCount = update_tracker(carTracker, carDetections, carCount, "car")
+    motorbikeCount = update_tracker(motorbikeTracker, motorbikeDetections, motorbikeCount, "motorbike")
+    busCount = update_tracker(busTracker, busDetections, busCount, "bus")
+    truckCount = update_tracker(truckTracker, truckDetections, truckCount, "truck")
 
     # Drawing the lines
 
-    cv2.line(img, (limits[0], limits[1]), (limits[2], limits[3]), (0, 0, 255), 2)
-    cv2.line(img, (limits[0] - offset, limits[1]), (limits[2] - offset, limits[3]), (153, 153, 255), 1)
-    cv2.line(img, (limits[0] + offset, limits[1]), (limits[2] + offset, limits[3]), (153, 153, 255), 1)
+    cv2.line(img, (linePosition[0], linePosition[1]), (linePosition[2], linePosition[3]), (0, 0, 255), 2)
+    cv2.line(img, (linePosition[0] - offset, linePosition[1]), (linePosition[2] - offset, linePosition[3]),
+             (153, 153, 255), 1)
+    cv2.line(img, (linePosition[0] + offset, linePosition[1]), (linePosition[2] + offset, linePosition[3]),
+             (153, 153, 255), 1)
 
-    for results in resultsTracker:
+    # Displaying counters
 
-        # Getting rect. data from the result
-
-        t_x1, t_y1, t_x2, t_y2, tracking_id = results
-        t_x1, t_y1, t_x2, t_y2, tracking_id = int(t_x1), int(t_y1), int(t_x2), int(t_y2), int(tracking_id)
-        t_w, t_h = calculate_w_h(t_x1, t_y1, t_x2, t_y2)
-
-        # Showing tracking bounding box, tracked object's id
-
-        cvzone.cornerRect(img, (t_x1, t_y1, t_w, t_h), l=8, t=2, rt=1, colorR=(255, 0, 0))
-        cvzone.putTextRect(img, f'{tracking_id}',
-                           (max(0, t_x1), max(30, t_y1)),
-                           scale=0.8, thickness=1, offset=2)
-
-        # Center points
-
-        t_cx, t_cy = t_x1 + t_w // 2, t_y1 + t_h // 2
-        cv2.circle(img, (t_cx, t_cy), 3, (255, 0, 255), cv2.FILLED)
-
-        if limits[0] - offset < t_cx < limits[0] + offset:
-            totalCount += 1
-
-        cvzone.putTextRect(img, f'vehicle count: {totalCount}',
-                           (20, 420),
-                           scale=1.2, thickness=1, offset=2, colorR=(0, 0, 0))
+    cvzone.putTextRect(img, f'car: {carCount}', (20, 400), scale=1.2, thickness=1, offset=2, colorR=(0, 0, 0))
+    cvzone.putTextRect(img, f'motorbike: {motorbikeCount}', (20, 420), scale=1.2, thickness=1, offset=2, colorR=(0, 0, 0))
+    cvzone.putTextRect(img, f'bus: {busCount}', (20, 440), scale=1.2, thickness=1, offset=2, colorR=(0, 0, 0))
+    cvzone.putTextRect(img, f'truck: {truckCount}', (20, 460), scale=1.2, thickness=1, offset=2, colorR=(0, 0, 0))
 
     cv2.imshow("Object counter", img)
     cv2.waitKey(1)
