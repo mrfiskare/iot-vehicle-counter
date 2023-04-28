@@ -32,9 +32,6 @@ minHits = 3
 iouThreshold = 0.3
 
 carTracker = Sort(max_age=maxAge, min_hits=minHits, iou_threshold=iouThreshold)
-motorbikeTracker = Sort(max_age=maxAge, min_hits=minHits, iou_threshold=iouThreshold)
-busTracker = Sort(max_age=maxAge, min_hits=minHits, iou_threshold=iouThreshold)
-truckTracker = Sort(max_age=maxAge, min_hits=minHits, iou_threshold=iouThreshold)
 
 # Line positions
 
@@ -68,7 +65,7 @@ def update_tracker(tracker, detections, count, type):
         # Showing tracking bounding box, tracked object's id
 
         cvzone.cornerRect(img, (t_x1, t_y1, t_w, t_h), l=8, t=2, rt=1, colorR=(255, 0, 0))
-        cvzone.putTextRect(img, f'[{tracking_id}] {type}',
+        cvzone.putTextRect(img, f'[{tracking_id}]',
                            (max(0, t_x1), max(30, t_y1)),
                            scale=0.8, thickness=1, offset=2, colorR=(0, 0, 102))
         print(f'tracking rect for {type}')
@@ -133,26 +130,12 @@ while True:
                 if currentClass == "car":
                     carDetections = np.vstack((carDetections, currentArray))
                     print("current class: car")
-                    carCount = update_tracker(carTracker, carDetections, carCount, "car")
 
-                if currentClass == "motorbike":
-                    carDetections = np.vstack((motorbikeDetections, currentArray))
-                    print("current class: motorbike")
-                    motorbikeCount = update_tracker(motorbikeTracker, motorbikeDetections, motorbikeCount, "motorbike")
 
-                if currentClass == "bus":
-                    carDetections = np.vstack((busDetections, currentArray))
-                    print("current class: bus")
-                    busCount = update_tracker(busTracker, busDetections, busCount, "bus")
-
-                if currentClass == "truck":
-                    carDetections = np.vstack((truckDetections, currentArray))
-                    print("current class: truck")
-                    truckCount = update_tracker(truckTracker, truckDetections, truckCount, "truck")
 
     # Assigning tracking IDs to the detected objects
 
-
+    carCount = update_tracker(carTracker, carDetections, carCount, "car")
 
 
 
