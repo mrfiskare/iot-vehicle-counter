@@ -32,7 +32,7 @@ maxAge = 20
 minHits = 3
 iouThreshold = 0.3
 
-carTracker = Sort(max_age=maxAge, min_hits=minHits, iou_threshold=iouThreshold)
+vehicleTracker = Sort(max_age=maxAge, min_hits=minHits, iou_threshold=iouThreshold)
 
 # Line positions
 
@@ -94,7 +94,7 @@ def match_array_tuples(detections_arr, tracking_arr):
     return arr_with_id_and_type.astype(int)
 
 
-def update_tracker(tracker, detections, count):
+def update_tracker(tracker, detections):
 
     # Matching the rows from detections to tracker_results.
     # This is needed because the detections array contains the vehicle types,
@@ -110,7 +110,6 @@ def update_tracker(tracker, detections, count):
         t_x1, t_y1, t_x2, t_y2, tracking_id, type_index = tracked_object
         t_w, t_h = calculate_w_h(t_x1, t_y1, t_x2, t_y2)
         cls_name = classNames[type_index]
-        print(f'[{tracking_id}] {cls_name}')
 
         # Showing tracking bounding box, tracked object's id
 
@@ -127,10 +126,18 @@ def update_tracker(tracker, detections, count):
         # Increase the counter if the id has not been counted before
 
         if linePosition[0] - offset < t_cx < linePosition[0] + offset:
-            if count.count(tracking_id) == 0:
-                count.append(tracking_id)
 
-    return count
+            if cls_name == "car" and carCount.count(tracking_id) == 0:
+                carCount.append(tracking_id)
+
+            if cls_name == "motorbike" and motorbikeCount.count(tracking_id) == 0:
+                motorbikeCount.append(tracking_id)
+
+            if cls_name == "truck" and truckCount.count(tracking_id) == 0:
+                truckCount.append(tracking_id)
+
+            if cls_name == "bus" and busCount.count(tracking_id) == 0:
+                busCount.append(tracking_id)
 
 
 while True:
@@ -173,12 +180,12 @@ while True:
                 #                    (max(0, x1), max(30, y1)),
                 #                    scale=0.8, thickness=1, offset=2)
 
-                if currentClass == "car":
+                if currentClass in vehicleTypes:
                     yoloDetections = np.vstack((yoloDetections, currentArray))
 
     # Assigning tracking IDs to the detected objects
 
-    carCount = update_tracker(carTracker, yoloDetections, carCount)
+    update_tracker(vehicleTracker, yoloDetections)
 
     # Drawing the lines
 
@@ -195,6 +202,11 @@ while True:
                        colorR=(0, 0, 0))
     cvzone.putTextRect(img, f'bus: {len(busCount)}', (20, 440), scale=1.2, thickness=1, offset=2, colorR=(0, 0, 0))
     cvzone.putTextRect(img, f'truck: {len(truckCount)}', (20, 460), scale=1.2, thickness=1, offset=2, colorR=(0, 0, 0))
+
+    print(f'car: {len(carCount)}')
+    print(f'motorbike: {len(motorbikeCount)}')
+    print(f'truck: {len(truckCount)}')
+    print(f'bus: {len(truckCount)}')
 
     cv2.imshow("Vehicle counter", img)
     cv2.waitKey(1)
