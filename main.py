@@ -7,12 +7,12 @@ from sort import *
 
 # Initialize webcam
 
-cap = cv2.VideoCapture("videos/many_cars.h264")
+cap = cv2.VideoCapture("videos/various.mp4")
 showImg = True
 
 # Initialize YOLO
 
-model = YOLO("yolo_weights/yolov8m.pt")
+model = YOLO("yolo_weights/yolov8n.pt")
 classNames = ["person", "bicycle", "car", "motorbike", "aeroplane", "bus",
               "train", "truck", "boat", "traffic light", "fire hydrant", "stop sign",
               "parking meter", "bench", "bird", "cat", "dog", "horse", "sheep", "cow",
@@ -202,11 +202,11 @@ while True:
     # Displaying counters
 
     if showImg:
-        cvzone.putTextRect(img, f'car: {len(carCount)}', (20, 400), scale=1.2, thickness=1, offset=2, colorR=(0, 0, 0))
-        cvzone.putTextRect(img, f'motorbike: {len(motorbikeCount)}', (20, 420), scale=1.2, thickness=1, offset=2,
+        cvzone.putTextRect(img, f'{"car:":<13}{len(carCount)}', (20, 400), scale=1.2, thickness=1, offset=2, colorR=(0, 0, 0))
+        cvzone.putTextRect(img, f'{"motorbike:":<12}{len(motorbikeCount)}', (20, 420), scale=1.2, thickness=1, offset=2,
                            colorR=(0, 0, 0))
-        cvzone.putTextRect(img, f'bus: {len(busCount)}', (20, 440), scale=1.2, thickness=1, offset=2, colorR=(0, 0, 0))
-        cvzone.putTextRect(img, f'truck: {len(truckCount)}', (20, 460), scale=1.2, thickness=1, offset=2,
+        cvzone.putTextRect(img, f'{"truck:":<13}{len(truckCount)}', (20, 440), scale=1.2, thickness=1, offset=2, colorR=(0, 0, 0))
+        cvzone.putTextRect(img, f'{"bus:":<13}{len(truckCount)}', (20, 460), scale=1.2, thickness=1, offset=2,
                            colorR=(0, 0, 0))
 
     print(f'{"car:":<12}{len(carCount)}')
