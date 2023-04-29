@@ -7,12 +7,12 @@ from sort import *
 
 # Initialize webcam
 
-cap = cv2.VideoCapture("videos/7_cars.h264")
+cap = cv2.VideoCapture("videos/many_cars.h264")
 showImg = True
 
 # Initialize YOLO
 
-model = YOLO("yolo_weights/yolov8n.pt")
+model = YOLO("yolo_weights/yolov8m.pt")
 classNames = ["person", "bicycle", "car", "motorbike", "aeroplane", "bus",
               "train", "truck", "boat", "traffic light", "fire hydrant", "stop sign",
               "parking meter", "bench", "bird", "cat", "dog", "horse", "sheep", "cow",
@@ -177,11 +177,11 @@ while True:
 
             if conf > 0.3:
 
-                if showImg:
-                    cvzone.cornerRect(img, bbox, l=8, t=2, rt=1)
-                    cvzone.putTextRect(img, f'{currentClass}',
-                                       (max(0, x1), max(30, y1)),
-                                       scale=0.8, thickness=1, offset=2)
+                # if showImg:
+                #     cvzone.cornerRect(img, bbox, l=8, t=2, rt=1)
+                #     cvzone.putTextRect(img, f'{currentClass}',
+                #                        (max(0, x1), max(30, y1)),
+                #                        scale=0.8, thickness=1, offset=2)
 
                 if currentClass in vehicleTypes:
                     yoloDetections = np.vstack((yoloDetections, currentArray))
