@@ -7,7 +7,8 @@ from sort import *
 
 # Initialize webcam
 
-cap = cv2.VideoCapture("videos/traffic_jam2.h264")
+cap = cv2.VideoCapture("videos/7_cars.h264")
+showImg = True
 
 # Initialize YOLO
 
@@ -113,10 +114,11 @@ def update_tracker(tracker, detections):
 
         # Showing tracking bounding box, tracked object's id
 
-        cvzone.cornerRect(img, (t_x1, t_y1, t_w, t_h), l=8, t=2, rt=1, colorR=(255, 0, 0))
-        cvzone.putTextRect(img, f'[{tracking_id}] {cls_name}',
-                           (max(0, t_x1), max(30, t_y1)),
-                           scale=0.8, thickness=1, offset=2, colorR=(0, 0, 102))
+        if showImg:
+            cvzone.cornerRect(img, (t_x1, t_y1, t_w, t_h), l=8, t=2, rt=1, colorR=(255, 0, 0))
+            cvzone.putTextRect(img, f'[{tracking_id}] {cls_name}',
+                               (max(0, t_x1), max(30, t_y1)),
+                               scale=0.8, thickness=1, offset=2, colorR=(0, 0, 102))
 
         # Center points
 
@@ -175,10 +177,11 @@ while True:
 
             if conf > 0.3:
 
-                # cvzone.cornerRect(img, bbox, l=8, t=2, rt=1)
-                # cvzone.putTextRect(img, f'{currentClass}',
-                #                    (max(0, x1), max(30, y1)),
-                #                    scale=0.8, thickness=1, offset=2)
+                if showImg:
+                    cvzone.cornerRect(img, bbox, l=8, t=2, rt=1)
+                    cvzone.putTextRect(img, f'{currentClass}',
+                                       (max(0, x1), max(30, y1)),
+                                       scale=0.8, thickness=1, offset=2)
 
                 if currentClass in vehicleTypes:
                     yoloDetections = np.vstack((yoloDetections, currentArray))
@@ -189,24 +192,28 @@ while True:
 
     # Drawing the lines
 
-    cv2.line(img, (linePosition[0], linePosition[1]), (linePosition[2], linePosition[3]), (0, 0, 255), 2)
-    cv2.line(img, (linePosition[0] - offset, linePosition[1]), (linePosition[2] - offset, linePosition[3]),
-             (153, 153, 255), 1)
-    cv2.line(img, (linePosition[0] + offset, linePosition[1]), (linePosition[2] + offset, linePosition[3]),
-             (153, 153, 255), 1)
+    if showImg:
+        cv2.line(img, (linePosition[0], linePosition[1]), (linePosition[2], linePosition[3]), (0, 0, 255), 2)
+        cv2.line(img, (linePosition[0] - offset, linePosition[1]), (linePosition[2] - offset, linePosition[3]),
+                 (153, 153, 255), 1)
+        cv2.line(img, (linePosition[0] + offset, linePosition[1]), (linePosition[2] + offset, linePosition[3]),
+                 (153, 153, 255), 1)
 
     # Displaying counters
 
-    cvzone.putTextRect(img, f'car: {len(carCount)}', (20, 400), scale=1.2, thickness=1, offset=2, colorR=(0, 0, 0))
-    cvzone.putTextRect(img, f'motorbike: {len(motorbikeCount)}', (20, 420), scale=1.2, thickness=1, offset=2,
-                       colorR=(0, 0, 0))
-    cvzone.putTextRect(img, f'bus: {len(busCount)}', (20, 440), scale=1.2, thickness=1, offset=2, colorR=(0, 0, 0))
-    cvzone.putTextRect(img, f'truck: {len(truckCount)}', (20, 460), scale=1.2, thickness=1, offset=2, colorR=(0, 0, 0))
+    if showImg:
+        cvzone.putTextRect(img, f'car: {len(carCount)}', (20, 400), scale=1.2, thickness=1, offset=2, colorR=(0, 0, 0))
+        cvzone.putTextRect(img, f'motorbike: {len(motorbikeCount)}', (20, 420), scale=1.2, thickness=1, offset=2,
+                           colorR=(0, 0, 0))
+        cvzone.putTextRect(img, f'bus: {len(busCount)}', (20, 440), scale=1.2, thickness=1, offset=2, colorR=(0, 0, 0))
+        cvzone.putTextRect(img, f'truck: {len(truckCount)}', (20, 460), scale=1.2, thickness=1, offset=2,
+                           colorR=(0, 0, 0))
 
-    print(f'car: {len(carCount)}')
-    print(f'motorbike: {len(motorbikeCount)}')
-    print(f'truck: {len(truckCount)}')
-    print(f'bus: {len(truckCount)}')
+    print(f'{"car:":<12}{len(carCount)}')
+    print(f'{"motorbike:":<12}{len(motorbikeCount)}')
+    print(f'{"truck:":<12}{len(truckCount)}')
+    print(f'{"bus:":<12}{len(truckCount)}')
 
-    cv2.imshow("Vehicle counter", img)
+    if showImg:
+        cv2.imshow("Vehicle counter", img)
     cv2.waitKey(1)
