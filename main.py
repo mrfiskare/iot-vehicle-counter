@@ -175,7 +175,7 @@ while True:
             # If the conf. level is high enough, printing the conf. and class name
             # to the terminal and bounding box for selected classes
 
-            if conf > 0.3:
+            if conf > 0.2:
 
                 # if showImg:
                 #     cvzone.cornerRect(img, bbox, l=8, t=2, rt=1)
@@ -206,13 +206,13 @@ while True:
         cvzone.putTextRect(img, f'{"motorbike:":<12}{len(motorbikeCount)}', (20, 420), scale=1.2, thickness=1, offset=2,
                            colorR=(0, 0, 0))
         cvzone.putTextRect(img, f'{"truck:":<13}{len(truckCount)}', (20, 440), scale=1.2, thickness=1, offset=2, colorR=(0, 0, 0))
-        cvzone.putTextRect(img, f'{"bus:":<13}{len(truckCount)}', (20, 460), scale=1.2, thickness=1, offset=2,
+        cvzone.putTextRect(img, f'{"bus:":<13}{len(busCount)}', (20, 460), scale=1.2, thickness=1, offset=2,
                            colorR=(0, 0, 0))
 
     print(f'{"car:":<12}{len(carCount)}')
     print(f'{"motorbike:":<12}{len(motorbikeCount)}')
     print(f'{"truck:":<12}{len(truckCount)}')
-    print(f'{"bus:":<12}{len(truckCount)}')
+    print(f'{"bus:":<12}{len(busCount)}')
 
     if showImg:
         cv2.imshow("Vehicle counter", img)
