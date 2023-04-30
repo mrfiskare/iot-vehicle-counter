@@ -1,5 +1,18 @@
 #!/bin/bash
 
+LOCKFILE="/tmp/upload_videos.lock"
+
+# Check if the lock file exists, exit if it does
+
+if [ -e "${LOCKFILE}" ]; then
+    echo "Another instance of the script is already running. Exiting."
+    exit 1
+fi
+
+# Create the lock file
+
+touch "${LOCKFILE}"
+
 SOURCE_DIR="/home/pi/recording/recorded/"
 DEST_DIR="C:/videos/input"
 WINDOWS_SERVER_IP="$1"
@@ -19,4 +32,8 @@ do
         echo "Error uploading: ${file}"
     fi
 done
+
+# Remove the lock file
+
+rm "${LOCKFILE}"
 
