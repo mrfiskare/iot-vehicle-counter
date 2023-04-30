@@ -16,10 +16,9 @@ time.sleep(2)
 # Set up the PiCamera object
 
 camera = picamera.PiCamera()
-camera.resolution = (640, 480)
+camera.resolution = (1920, 1080)
 camera.vflip = True
 camera.hflip = True
-camera.zoom=(0.3,0.4,0.65,0.45)
 camera.framerate = 10
 
 # Set the recording length (in seconds)
@@ -55,9 +54,9 @@ for i in range(8):
     available_space_gb = available_space / (1024 ** 3)
     print(f"\nAvailable space: {available_space_gb:.2f} GB", file=sys.stdout, flush=True)
 
-    # Check if available space is at least 10 GB
+    # Check if available space is at least 5 GB
 
-    if available_space_gb < 10:
+    if available_space_gb < 5:
 
         sys.exit("Error: Not enough free space on the machine!")
 
@@ -65,18 +64,59 @@ for i in range(8):
 
     # Set the output filename to the current timestamp
 
-        timestamped_file = time.strftime("%Y-%m-%d_%H-%M") + ".h264"
+        timestamp = time.strftime("%Y-%m-%d_%H-%M")
+        timestamped_file = timestamp + ".h264"
         output_filename = output_directory + timestamped_file
 
         camera.start_recording(output_filename)
         camera.wait_recording(recording_length)
         camera.stop_recording()
         time.sleep(2)
-        
-        # Move the file to the captured folder
 
-        os.rename(output_filename, done_directory + timestamped_file)
-        print(f"Recorded: {done_directory}{timestamped_file}", file=sys.stdout, flush=True)
+        # Cropping the video to 720p
+
+        input_file = output_filename
+        output_file = output_directory + timestamp + ".mkv"
+
+        # Define the FFmpeg command
+
+        ffmpeg_command = [
+            "ffmpeg",
+            "-i", input_file,
+            "-vf", "crop=1280:720:640:360",
+            "-c:v", "ffv1",
+            "-an",
+            "-r", "10",
+            output_file
+        ]
+
+        # Run the FFmpeg command using subprocess
+
+        result = subprocess.run(ffmpeg_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+        # Check if the FFmpeg command was successful
+
+        if result.returncode == 0:
+
+            print(f"Successfully processed {input_file} and saved it as {output_file}")
+            
+            # Move the file to the captured folder
+
+            os.rename(output_file, done_directory + timestamp + ".mkv")
+            print(f"Recorded: {done_directory}{timestamp}.mkv", file=sys.stdout, flush=True)
+
+            # Delete the input file
+
+            try:
+                os.remove(input_file)
+                print(f"Deleted the input file: {input_file}")
+
+            except OSError as e:
+                print(f"Error deleting the input file: {e}")
+
+        else:
+            print(f"An error occurred while processing {input_file}")
+            print(f"Error details: {result.stderr.decode('utf-8')}")
 
 camera.close()
 time.sleep(5)
