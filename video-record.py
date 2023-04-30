@@ -81,4 +81,19 @@ for i in range(8):
 
 camera.close()
 time.sleep(5)
+
+# Initialize parameters
+
+win_pw = sys.argv[1]
+win_ip = sys.argv[2]
+
+command = f"sshpass -p {win_pw} scp -P 22 /home/pi/recording/recorded/* pi@192.168.0.10:C:/videos/input"
+    
+try:
+    subprocess.check_output(command, shell=True, stderr=subprocess.STDOUT)
+    print("File transfer completed successfully.")
+
+except subprocess.CalledProcessError as e:
+    print(f"Error occurred during file transfer: {e.output.decode('utf-8')}")
+
 print("\n")
