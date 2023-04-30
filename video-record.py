@@ -75,6 +75,7 @@ for i in range(8):
 
         # Cropping the video to 720p
 
+        print("cropping video ...")
         input_file = output_filename
         output_file = output_directory + timestamp + ".mkv"
 
