@@ -76,7 +76,7 @@ for i in range(8):
         # Move the file to the captured folder
 
         os.rename(output_filename, done_directory + timestamped_file)
-        print(f"Recorded: {done_directory}{timestamp}.mkv", file=sys.stdout, flush=True)
+        print(f"Recorded: {done_directory}{timestamp}.h264", file=sys.stdout, flush=True)
 
 
 camera.close()
