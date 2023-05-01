@@ -81,7 +81,7 @@ jobs:
           port: ${{ secrets.PORT }}
           key: ${{ secrets.PRIVATE_KEY}}
 
-      - name: SCP upload -> record-upload-scp.sh
+      - name: SCP upload -> video-upload-scp.sh
         uses: nicklasfrahm/scp-action@main
         with:
           direction: "upload"
@@ -91,8 +91,31 @@ jobs:
           insecure_ignore_fingerprint: "true"
           fingerprint: ${{ secrets.FINGERPRINT }}
           key: ${{ secrets.PRIVATE_KEY }}
-          source: "./video-upload.sh"
+          source: "./video-upload-scp.sh"
           target: "/home/pi/scripts/video-upload-scp.sh"
+
+      - name: SCP upload -> video-crop.sh
+        uses: nicklasfrahm/scp-action@main
+        with:
+          direction: "upload"
+          host: ${{ secrets.HOST }}
+          port: ${{ secrets.PORT }}
+          username: ${{ secrets.USER }}
+          insecure_ignore_fingerprint: "true"
+          fingerprint: ${{ secrets.FINGERPRINT }}
+          key: ${{ secrets.PRIVATE_KEY }}
+          source: "./video-crop.sh"
+          target: "/home/pi/scripts/video-crop.sh"
+
+      - name: Windows Server -> video-crop.sh
+        uses: fifsky/ssh-action@master
+        with:
+          command: |
+            sshpass -p ${{ secrets.PASSWORD }} scp -P 22 /home/pi/scripts/video-crop.sh ${{ secrets.PASSWORD }}@${{ secrets.WIN_IP }}:C:/scripts/video-crop
+          host: ${{ secrets.HOST }}
+          user: ${{ secrets.USER }}
+          port: ${{ secrets.PORT }}
+          key: ${{ secrets.PRIVATE_KEY}}
 
 
           
