@@ -131,53 +131,54 @@ class VehicleCounter:
                 if cls_name == "bus" and self.busCount.count(tracking_id) == 0:
                     self.busCount.append(tracking_id)
 
-        def count(file_path):
+    def count(self, file_path):
 
-            # Initialize video
+        # Initialize video
 
-            cap = cv2.VideoCapture(file_path)
+        cap = cv2.VideoCapture(file_path)
 
-            while True:
-                success, img = cap.read()
-                results = self.model(img, stream=True)
-                yolo_detections = np.empty((0, 6))
+        while True:
+            success, img = cap.read()
+            results = self.model(img, stream=True)
+            yolo_detections = np.empty((0, 6))
 
-                for r in results:
+            for r in results:
 
-                    # Drawing bounding boxes around specified objects with cvzone
+                # Drawing bounding boxes around specified objects with cvzone
 
-                    boxes = r.boxes
-                    for box in boxes:
-                        x1, y1, x2, y2 = box.xyxy[0]
-                        x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
-                        w, h = calculate_w_h(x1, y1, x2, y2)
-                        bbox = x1, y1, w, h
+                boxes = r.boxes
+                for box in boxes:
+                    x1, y1, x2, y2 = box.xyxy[0]
+                    x1, y1, x2, y2 = int(x1), int(y1), int(x2), int(y2)
+                    w, h = calculate_w_h(x1, y1, x2, y2)
+                    bbox = x1, y1, w, h
 
-                        # Rounding confidence to 2 decimals
+                    # Rounding confidence to 2 decimals
 
-                        conf = math.ceil(box.conf[0] * 100) / 100
+                    conf = math.ceil(box.conf[0] * 100) / 100
 
-                        # Getting the class name, using the pre-defined array of coco-classes
+                    # Getting the class name, using the pre-defined array of coco-classes
 
-                        cls = int(box.cls[0])
-                        current_class = self.classNames[cls]
+                    cls = int(box.cls[0])
+                    current_class = self.classNames[cls]
 
-                        # Defining the parameter for the sorting algorithm
+                    # Defining the parameter for the sorting algorithm
 
-                        current_array = np.array([x1, y1, x2, y2, conf, cls])
+                    current_array = np.array([x1, y1, x2, y2, conf, cls])
 
-                        # If the conf. level is high enough, printing the conf. and class name
-                        # to the terminal and bounding box for selected classes
+                    # If the conf. level is high enough, printing the conf. and class name
+                    # to the terminal and bounding box for selected classes
 
-                        if conf > 0.2:
+                    if conf > 0.2:
 
-                            if current_class in self.vehicleTypes:
-                                yolo_detections = np.vstack((yolo_detections, current_array))
+                        if current_class in self.vehicleTypes:
+                            yolo_detections = np.vstack((yolo_detections, current_array))
 
-                # Assigning tracking IDs to the detected objects
+            # Assigning tracking IDs to the detected objects
 
-                self.update_tracker(self.vehicleTracker, yolo_detections, img)
-                cv2.waitKey(0)
+            self.update_tracker(self.vehicleTracker, yolo_detections, img)
+            print("track")
+            cv2.waitKey(0)
 
         return len(self.carCount), len(self.motorbikeCount), len(self.busCount), len(self.truckCount)
 

@@ -43,7 +43,7 @@ for file_path in glob.glob(os.path.join(output_folder, '*.mkv')):
     timestamp_str = os.path.splitext(filename)[0]
     timestamp_iso = convert_to_iso(timestamp_str)
 
-    carCount, motorbikeCount, busCount, truckCount = vehicle_counter.count_vehicles(file_path)
+    carCount, motorbikeCount, busCount, truckCount = vehicle_counter.count(file_path)
 
     data.append({
         'timestamp': timestamp_iso,
