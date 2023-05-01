@@ -31,14 +31,14 @@ jobs:
           port: ${{ secrets.PORT }}
           key: ${{ secrets.PRIVATE_KEY}}
 
-      - name: Tarballing the repo for upload
+      - name: Compressing the repo for upload
         run: |
           mkdir ../repo
           cp -TR . ../repo
           tar -cvf repo.tar ../repo/
           mv repo.tar pte-camera-node.tar
       
-      - name: SCP upload -> video-record.py
+      - name: SCP upload -> pte-camera-node.tar
         uses: nicklasfrahm/scp-action@main
         with:
           direction: "upload"
@@ -51,7 +51,7 @@ jobs:
           source: "pte-camera-node.tar"
           target: "/home/pi/git/pte-camera-node.tar"
 
-      - name: SSH -> untar the cloned repo
+      - name: SSH -> Extracting pte-camera-node.tar
         uses: fifsky/ssh-action@master
         with:
           command: |
@@ -60,6 +60,28 @@ jobs:
             rm -rf /home/pi/git/pte-camera-node.tar
             cp /home/pi/git/pte-camera-node/*.sh /home/pi/scripts
             cp /home/pi/git/pte-camera-node/*.py /home/pi/scripts
+          host: ${{ secrets.HOST }}
+          user: ${{ secrets.USER }}
+          port: ${{ secrets.PORT }}
+          key: ${{ secrets.PRIVATE_KEY}}
+
+      - name: SSH -> creating video-record-test.py
+        uses: fifsky/ssh-action@master
+        with:
+          command: |
+            cp /home/pi/scripts/video-record.py /home/pi/scripts/video-record-test.py
+            sed -i 's/60 \* 60/10 \* 1/g' /home/pi/scripts/video-record-test.py
+            sed -i 's/range([0-9]\{1,2\})/range(1)/g' /home/pi/scripts/video-record-test.py
+          host: ${{ secrets.HOST }}
+          user: ${{ secrets.USER }}
+          port: ${{ secrets.PORT }}
+          key: ${{ secrets.PRIVATE_KEY}}
+
+      - name: Windows Server -> video-crop.py
+        uses: fifsky/ssh-action@master
+        with:
+          command: |
+            sshpass -p ${{ secrets.PASSWORD }} ssh -p 22 ${{ secrets.USER }}@${{ secrets.WIN_IP }} 'powershell.exe -Command "cd C:\Users\pi\git\pte-camera-node; git fetch --all; git reset --hard origin/main"'
           host: ${{ secrets.HOST }}
           user: ${{ secrets.USER }}
           port: ${{ secrets.PORT }}
