@@ -33,8 +33,11 @@ jobs:
 
       - name: Gzipping the repo for upload
         run: |
-          mkdir ../repo
-          cp -TR . ../repo
+          mv ../{pte-camera-node,pte-camera-node2}
+          cd ..
+          cd pte-camera-node2
+          mkdir ../pte-camera-node
+          cp -TR . ../pte-camera-node
           tar -cvf pte-camera-node.tar ../repo/
       
       - name: SCP upload -> video-record.py
