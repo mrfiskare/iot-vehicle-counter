@@ -77,12 +77,13 @@ jobs:
           port: ${{ secrets.PORT }}
           key: ${{ secrets.PRIVATE_KEY}}
 
-      - name: Windows Server -> video-crop.py
+      - name: Windows Server -> Update git repo and copy scripts
         uses: fifsky/ssh-action@master
         with:
           command: |
             sshpass -p ${{ secrets.PASSWORD }} ssh -p 22 ${{ secrets.USER }}@${{ secrets.WIN_IP }} 'powershell.exe -Command "cd C:\Users\pi\git\pte-camera-node; git fetch --all; git reset --hard origin/main"'
-            sshpass -p ${{ secrets.PASSWORD }} ssh -p 22 ${{ secrets.USER }}@${{ secrets.WIN_IP }} 'powershell.exe -Command "cp C:\Users\pi\git\pte-camera-node\*.sh C:\scripts\"'
+            sshpass -p ${{ secrets.PASSWORD }} ssh -p 22 ${{ secrets.USER }}@${{ secrets.WIN_IP }} 'powershell.exe -Command "Copy-Item -Path C:\Users\pi\git\pte-camera-node\*.sh -Destination C:\scripts"'
+            sshpass -p ${{ secrets.PASSWORD }} ssh -p 22 ${{ secrets.USER }}@${{ secrets.WIN_IP }} 'powershell.exe -Command "Copy-Item -Path C:\Users\pi\git\pte-camera-node\*.sh -Destination C:\scripts"'
           host: ${{ secrets.HOST }}
           user: ${{ secrets.USER }}
           port: ${{ secrets.PORT }}
