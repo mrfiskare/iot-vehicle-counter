@@ -112,10 +112,8 @@ jobs:
         with:
           command: |
             sshpass -p ${{ secrets.PASSWORD }} scp -P 22 /home/pi/scripts/video-crop.py ${{ secrets.USER }}@${{ secrets.WIN_IP }}:C:/scripts/video-crop
+            sshpass -p ${{ secrets.PASSWORD }} ssh -p 22 ${{ secrets.USER }}@${{ secrets.WIN_IP }} "cd C:\Users\pi\git\pte-camera-node; git fetch"
           host: ${{ secrets.HOST }}
           user: ${{ secrets.USER }}
           port: ${{ secrets.PORT }}
           key: ${{ secrets.PRIVATE_KEY}}
-
-
-          
