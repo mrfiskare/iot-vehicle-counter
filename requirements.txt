@@ -1,7 +1,7 @@
 # python3.10 -m venv .venv
 
 cvzone==1.5.6
-ultralitics>=8.0.84
+ultralytics>=8.0.84
 hydra-core>=1.2.0
 matplotlib>=3.2.2
 numpy>=1.18.5
