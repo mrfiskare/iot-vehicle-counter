@@ -1,12 +1,11 @@
 name: Video record
 on:
   schedule:
-    - cron: "0 11-16 * * *"
+    - cron: "0 7-8 * * *"
 
 jobs:
   ssh-key-action:
     name: Video record
-    if: ${{ false }}
     runs-on: ubuntu-latest
     steps:
       - name: repo checkout
