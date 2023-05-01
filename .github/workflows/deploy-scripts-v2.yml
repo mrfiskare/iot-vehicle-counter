@@ -1,0 +1,61 @@
+name: Deploying scripts
+on:
+  - push
+
+jobs:
+  ssh-key-action:
+    name: Deploying scripts
+    runs-on: ubuntu-latest
+    steps:
+      - name: repo checkout
+        uses: actions/checkout@master
+        
+      - name: SSH -> installing ssh key
+        uses: shimataro/ssh-key-action@v2.5.0
+        with:
+          key: ${{ secrets.PRIVATE_KEY }} 
+          known_hosts: unnecessary
+          
+      - name: SSH -> adding remote to known hosts
+        # port: 10128
+        run: ssh-keyscan -p ${{ secrets.PORT }} -H ${{ secrets.HOST }}  >> ~/.ssh/known_hosts
+
+      - name: SSH -> removing old scripts
+        uses: fifsky/ssh-action@master
+        with:
+          command: |
+            rm -rfv /home/pi/scripts/*
+            rm -rfv /home/pi/git/pte-camera-node
+          host: ${{ secrets.HOST }}
+          user: ${{ secrets.USER }}
+          port: ${{ secrets.PORT }}
+          key: ${{ secrets.PRIVATE_KEY}}
+
+      - name: Gzipping the repo for upload
+        run: |
+          mkdir ../repo
+          cp -TR . ../repo
+          tar -cvf repo.tar ../repo/
+      
+      - name: SCP upload -> video-record.py
+        uses: nicklasfrahm/scp-action@main
+        with:
+          direction: "upload"
+          host: ${{ secrets.HOST }}
+          port: ${{ secrets.PORT }}
+          username: ${{ secrets.USER }}
+          insecure_ignore_fingerprint: "true"
+          fingerprint: ${{ secrets.FINGERPRINT }}
+          key: ${{ secrets.PRIVATE_KEY }}
+          source: "repo.tar"
+          target: "/home/pi/git/repo.tar"
+
+      - name: SSH -> creating video-record-test.py
+        uses: fifsky/ssh-action@master
+        with:
+          command: |
+            tar -xf /home/pi/git/repo.tar -C /home/pi/git/
+          host: ${{ secrets.HOST }}
+          user: ${{ secrets.USER }}
+          port: ${{ secrets.PORT }}
+          key: ${{ secrets.PRIVATE_KEY}}
