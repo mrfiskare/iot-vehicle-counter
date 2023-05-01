@@ -1,10 +1,10 @@
-name: Deploying scripts
+name: Deploying scripts v2
 on:
   - push
 
 jobs:
   ssh-key-action:
-    name: Deploying scripts
+    name: Deploying scripts v2
     runs-on: ubuntu-latest
     steps:
       - name: repo checkout
@@ -35,7 +35,7 @@ jobs:
         run: |
           mkdir ../repo
           cp -TR . ../repo
-          tar -cvf repo.tar ../repo/
+          tar -cvf pte-camera-node.tar ../repo/
       
       - name: SCP upload -> video-record.py
         uses: nicklasfrahm/scp-action@main
@@ -47,14 +47,15 @@ jobs:
           insecure_ignore_fingerprint: "true"
           fingerprint: ${{ secrets.FINGERPRINT }}
           key: ${{ secrets.PRIVATE_KEY }}
-          source: "repo.tar"
-          target: "/home/pi/git/repo.tar"
+          source: "pte-camera-node.tar"
+          target: "/home/pi/git/pte-camera-node.tar"
 
       - name: SSH -> creating video-record-test.py
         uses: fifsky/ssh-action@master
         with:
           command: |
-            tar -xf /home/pi/git/repo.tar -C /home/pi/git/
+            tar -xf /home/pi/git/pte-camera-node.tar -C /home/pi/git/
+            rm -rf /home/pi/git/pte-camera-node.tar
           host: ${{ secrets.HOST }}
           user: ${{ secrets.USER }}
           port: ${{ secrets.PORT }}
