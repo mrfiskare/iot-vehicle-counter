@@ -31,14 +31,14 @@ jobs:
           port: ${{ secrets.PORT }}
           key: ${{ secrets.PRIVATE_KEY}}
 
-      - name: Gzipping the repo for upload
+      - name: Tarballing the repo for upload
         run: |
           mv ../{pte-camera-node,pte-camera-node2}
           cd ..
           cd pte-camera-node2
           mkdir ../pte-camera-node
           cp -TR . ../pte-camera-node
-          tar -cvf pte-camera-node.tar ../repo/
+          tar -cvf pte-camera-node.tar ../pte-camera-node/
       
       - name: SCP upload -> video-record.py
         uses: nicklasfrahm/scp-action@main
