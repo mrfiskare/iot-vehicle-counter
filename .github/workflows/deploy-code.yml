@@ -20,12 +20,22 @@ jobs:
         # port: 10128
         run: ssh-keyscan -p ${{ secrets.PORT }} -H ${{ secrets.HOST }}  >> ~/.ssh/known_hosts
 
-      - name: SSH -> deploying project
+      - name: SSH -> deploying project to Pi
         uses: fifsky/ssh-action@master
         with:
           command: |
             cd /home/pi/git/pte-yolo-node
             gh repo sync
+          host: ${{ secrets.HOST }}
+          user: ${{ secrets.USER }}
+          port: ${{ secrets.PORT }}
+          key: ${{ secrets.PRIVATE_KEY}}
+
+      - name: Windows Server -> deploying project
+        uses: fifsky/ssh-action@master
+        with:
+          command: |
+            sshpass -p ${{ secrets.PASSWORD }} ssh -p 22 ${{ secrets.USER }}@${{ secrets.WIN_IP }} 'powershell.exe -Command "cd C:\Users\pi\git\pte-yolo-node; git fetch --all; git reset --hard origin/main"'
           host: ${{ secrets.HOST }}
           user: ${{ secrets.USER }}
           port: ${{ secrets.PORT }}
