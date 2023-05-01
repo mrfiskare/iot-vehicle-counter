@@ -77,7 +77,17 @@ jobs:
           port: ${{ secrets.PORT }}
           key: ${{ secrets.PRIVATE_KEY}}
 
-      - name: Windows Server -> Update git repo and copy scripts
+      - name: Windows Server -> Deleting old scripts
+        uses: fifsky/ssh-action@master
+        with:
+          command: |
+            sshpass -p ${{ secrets.PASSWORD }} ssh -p 22 ${{ secrets.USER }}@${{ secrets.WIN_IP }} 'powershell.exe -Command "Remove-Item C:\scripts\* -Recurse -Force"'
+          host: ${{ secrets.HOST }}
+          user: ${{ secrets.USER }}
+          port: ${{ secrets.PORT }}
+          key: ${{ secrets.PRIVATE_KEY}}
+
+      - name: Windows Server -> Update git repo
         uses: fifsky/ssh-action@master
         with:
           command: |
@@ -87,7 +97,7 @@ jobs:
           port: ${{ secrets.PORT }}
           key: ${{ secrets.PRIVATE_KEY}}
 
-      - name: Windows Server -> Update git repo and copy scripts
+      - name: Windows Server -> Copy shell scripts to the scripts folder
         uses: fifsky/ssh-action@master
         with:
           command: |
@@ -97,7 +107,7 @@ jobs:
           port: ${{ secrets.PORT }}
           key: ${{ secrets.PRIVATE_KEY}}
 
-      - name: Windows Server -> Update git repo and copy scripts
+      - name: Windows Server -> Copy python scripts to the scripts folder
         uses: fifsky/ssh-action@master
         with:
           command: |
