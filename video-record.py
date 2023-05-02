@@ -100,7 +100,6 @@ except subprocess.CalledProcessError as e:
 print("\n")
 
 print("Cropping videos on Windows Server")
-crop_command
 command = f"sshpass -p {win_pw} ssh -p 22 pi@{win_ip} 'python C:/scripts/video-crop.py'"
     
 try:
