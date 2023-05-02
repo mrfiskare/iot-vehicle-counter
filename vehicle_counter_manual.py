@@ -7,7 +7,7 @@ from sort import *
 
 # Initialize webcam
 
-cap = cv2.VideoCapture("videos/1.h264")
+cap = cv2.VideoCapture("videos/1.mkv")
 showImg = True
 
 # Initialize YOLO
