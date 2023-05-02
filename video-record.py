@@ -87,6 +87,7 @@ time.sleep(5)
 win_pw = sys.argv[1]
 win_ip = sys.argv[2]
 
+print("Uploading to Windows Server")
 command = f"sshpass -p {win_pw} scp -P 22 /home/pi/recording/recorded/* pi@192.168.0.10:C:/videos/input"
     
 try:
