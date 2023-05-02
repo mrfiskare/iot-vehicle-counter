@@ -100,7 +100,8 @@ except subprocess.CalledProcessError as e:
 print("\n")
 
 print("Cropping videos on Windows Server")
-command = f"sshpass -p {win_pw} ssh -p 22 pi@{win_ip} 'powershell.exe -Command "python C:/scripts/video-crop.py"'"
+crop_command
+command = f"sshpass -p {win_pw} ssh -p 22 pi@{win_ip} 'python C:/scripts/video-crop.py'"
     
 try:
     subprocess.check_output(command, shell=True, stderr=subprocess.STDOUT)
