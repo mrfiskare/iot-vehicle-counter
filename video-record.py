@@ -98,3 +98,15 @@ except subprocess.CalledProcessError as e:
     print(f"Error occurred during file transfer: {e.output.decode('utf-8')}")
 
 print("\n")
+
+print("Cropping videos on Windows Server")
+command = f"sshpass -p {win_pw} ssh -p 22 pi@{win_ip} 'powershell.exe -Command "python C:/scripts/video-crop.py"'
+    
+try:
+    subprocess.check_output(command, shell=True, stderr=subprocess.STDOUT)
+    print("Video cropping completed successfully.")
+
+except subprocess.CalledProcessError as e:
+    print(f"Error occurred during video cropping: {e.output.decode('utf-8')}")
+
+print("\n")
