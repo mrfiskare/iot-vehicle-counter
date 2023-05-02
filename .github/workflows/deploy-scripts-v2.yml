@@ -17,7 +17,7 @@ jobs:
           known_hosts: unnecessary
           
       - name: SSH -> adding remote to known hosts
-        # port: 10121
+        # port: 10122
         run: ssh-keyscan -p ${{ secrets.PORT }} -H ${{ secrets.HOST }}  >> ~/.ssh/known_hosts
 
       - name: SSH -> removing old scripts
