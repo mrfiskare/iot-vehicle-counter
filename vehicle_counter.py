@@ -8,8 +8,10 @@ from sort import *
 
 class VehicleCounter:
     def __init__(self, video_path="videos/2023-05-02_10-5.mkv", yolo_weights_path="yolo_weights/yolov8n.pt", show_img=False, verbose=True):
+        self.video_path = video_path
         self.cap = cv2.VideoCapture(video_path)
         self.show_img = show_img
+        self.verbose = verbose
 
         # Initialize YOLO
         self.model = YOLO(yolo_weights_path)
@@ -195,6 +197,15 @@ class VehicleCounter:
                 if self.show_img:
                     cv2.imshow("Vehicle counter", im)
                     cv2.waitKey(1)
+
+                # Clearing the screen
+
+                if not self.verbose:
+                    print(f'\n{self.video_path}')
+                    if (os.name == 'posix'):
+                        os.system('clear')
+                    else:
+                        os.system('cls')
 
         cv2.destroyAllWindows()
 
