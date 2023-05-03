@@ -59,7 +59,7 @@ for file in glob.glob(SOURCE_DIR + "**/*.h264", recursive=True):
 
 
 print("Cropping videos on Windows Server")
-command = f"sshpass -p {win_pw} ssh -p 22 pi@{win_ip} 'python C:/scripts/video-crop.py'"
+command = f"sshpass -p {PASSWORD} ssh -p 22 pi@{WINDOWS_SERVER_IP} 'python C:/scripts/video-crop.py'"
     
 try:
     subprocess.check_output(command, shell=True, stderr=subprocess.STDOUT)
