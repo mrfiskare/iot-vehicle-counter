@@ -1,12 +1,11 @@
 name: Video SCP upload
 on:
   schedule:
-    - cron: "0 11-16 * * *"
+    - cron: "*/15 12-16 * * *"
 
 jobs:
   ssh-key-action:
     name: Video SCP upload
-    if: ${{ false }}
     runs-on: ubuntu-latest
     steps:
       - name: repo checkout
@@ -26,7 +25,7 @@ jobs:
         uses: fifsky/ssh-action@master
         with:
           command: |
-            sh /home/pi/scripts/video-upload-scp.py ${{ secrets.WIN_IP }} ${{ secrets.WIN_PORT }} ${{ secrets.WIN_USER }} ${{ secrets.PASSWORD }} &
+            python3 /home/pi/scripts/video-upload-scp.py ${{ secrets.WIN_IP }} ${{ secrets.WIN_PORT }} ${{ secrets.WIN_USER }} ${{ secrets.PASSWORD }} &
           host: ${{ secrets.HOST }}
           user: ${{ secrets.USER }}
           port: ${{ secrets.PORT }}

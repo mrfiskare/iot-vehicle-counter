@@ -23,7 +23,7 @@ camera.framerate = 30
 
 # Set the recording length (in seconds)
 
-recording_length = 60 * 60
+recording_length = 60 * 10
 
 # Set the output directories
 
@@ -46,7 +46,7 @@ if not os.path.exists(done_directory) :
 
 # Record videos splitted into parts
 
-for i in range(2):
+for i in range(18):
 
     # Get the available space on the root partition in GB
 
@@ -84,29 +84,29 @@ time.sleep(5)
 
 # Initialize parameters
 
-win_pw = sys.argv[1]
-win_ip = sys.argv[2]
+# win_pw = sys.argv[1]
+# win_ip = sys.argv[2]
 
-print("Uploading to Windows Server")
-command = f"sshpass -p {win_pw} scp -P 22 /home/pi/recording/recorded/* pi@192.168.0.10:C:/videos/input"
+# print("Uploading to Windows Server")
+# command = f"sshpass -p {win_pw} scp -P 22 /home/pi/recording/recorded/* pi@192.168.0.10:C:/videos/input"
     
-try:
-    subprocess.check_output(command, shell=True, stderr=subprocess.STDOUT)
-    print("File transfer completed successfully.")
+# try:
+#     subprocess.check_output(command, shell=True, stderr=subprocess.STDOUT)
+#     print("File transfer completed successfully.")
 
-except subprocess.CalledProcessError as e:
-    print(f"Error occurred during file transfer: {e.output.decode('utf-8')}")
+# except subprocess.CalledProcessError as e:
+#     print(f"Error occurred during file transfer: {e.output.decode('utf-8')}")
 
-print("\n")
+# print("\n")
 
-print("Cropping videos on Windows Server")
-command = f"sshpass -p {win_pw} ssh -p 22 pi@{win_ip} 'python C:/scripts/video-crop.py'"
+# print("Cropping videos on Windows Server")
+# command = f"sshpass -p {win_pw} ssh -p 22 pi@{win_ip} 'python C:/scripts/video-crop.py'"
     
-try:
-    subprocess.check_output(command, shell=True, stderr=subprocess.STDOUT)
-    print("Video cropping completed successfully.")
+# try:
+#     subprocess.check_output(command, shell=True, stderr=subprocess.STDOUT)
+#     print("Video cropping completed successfully.")
 
-except subprocess.CalledProcessError as e:
-    print(f"Error occurred during video cropping: {e.output.decode('utf-8')}")
+# except subprocess.CalledProcessError as e:
+#     print(f"Error occurred during video cropping: {e.output.decode('utf-8')}")
 
-print("\n")
+# print("\n")
