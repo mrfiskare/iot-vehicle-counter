@@ -21,17 +21,34 @@ for filename in os.listdir(input_directory):
         
         input_file = os.path.join(input_directory, filename)
         timestamp = filename.rstrip(".h264")
-        output_filename = output_directory + timestamp + ".mkv"
-
+        
         # Cropping the video to 720p
 
         print("cropping video ...")
+
+        # Lossless MKV conversion
+        # output_filename = output_directory + timestamp + ".mkv"
+        # ffmpeg_command = [
+        #     "ffmpeg",
+        #     "-i", input_file,
+        #     "-vf", "crop=1280:720:640:360",
+        #     "-c:v", "ffv1",
+        #     "-an",
+        #     "-r", "30",
+        #     output_filename
+        # ]
+
+        # Lossy H264 conversion
+
+        output_filename = output_directory + timestamp + ".h264"
 
         ffmpeg_command = [
             "ffmpeg",
             "-i", input_file,
             "-vf", "crop=1280:720:640:360",
-            "-c:v", "ffv1",
+            "-c:v", "libx264",
+            "-crf", "18",  # Increase this value for a smaller file size (e.g., 25 or 28) and lower quality
+            "-preset", "medium",  # Use 'fast' or 'faster' for a faster encoding with a slightly larger file size
             "-an",
             "-r", "30",
             output_filename
