@@ -26,7 +26,7 @@ jobs:
         uses: fifsky/ssh-action@master
         with:
           command: |
-            sh /home/pi/scripts/video-upload-scp.sh ${{ secrets.WIN_IP }} ${{ secrets.WIN_PORT }} ${{ secrets.WIN_USER }} ${{ secrets.PASSWORD }} &
+            sh /home/pi/scripts/video-upload-scp.py ${{ secrets.WIN_IP }} ${{ secrets.WIN_PORT }} ${{ secrets.WIN_USER }} ${{ secrets.PASSWORD }} &
           host: ${{ secrets.HOST }}
           user: ${{ secrets.USER }}
           port: ${{ secrets.PORT }}
