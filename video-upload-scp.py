@@ -8,12 +8,15 @@ from pathlib import Path
 
 LOCKFILE = "/tmp/upload_videos.lock"
 
+print("Checking lockfile...")
+
 # Check if the lock file exists, exit if it does
 if os.path.exists(LOCKFILE):
     print("Another instance of the script is already running. Exiting.")
     sys.exit(1)
 
 # Create the lock file
+print("Creating lockfile")
 Path(LOCKFILE).touch()
 
 SOURCE_DIR = "/home/pi/recording/recorded/"
@@ -27,6 +30,8 @@ WINDOWS_SERVER_IP = sys.argv[1]
 SSH_PORT = sys.argv[2]
 SSH_USER = sys.argv[3]
 PASSWORD = sys.argv[4]
+
+print(f'uploading to {WINDOWS_SERVER_IP}')
 
 # Find .h264 video files and upload them to the Windows Server
 for file in glob.glob(SOURCE_DIR + "**/*.h264", recursive=True):
