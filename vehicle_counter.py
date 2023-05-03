@@ -7,7 +7,7 @@ from sort import *
 
 
 class VehicleCounter:
-    def __init__(self, video_path="videos/compressed_output.mp4", yolo_weights_path="yolo_weights/yolov8n.pt", show_img=True):
+    def __init__(self, video_path="videos/2023-05-02_10-5.mkv", yolo_weights_path="yolo_weights/yolov8n.pt", show_img=False, verbose=True):
         self.cap = cv2.VideoCapture(video_path)
         self.show_img = show_img
 
@@ -124,8 +124,13 @@ class VehicleCounter:
 
     def run(self):
         while True:
-            success, img = self.cap.read()
-            results = self.model(img, stream=True)
+            ret, im = self.cap.read()
+            results = self.model(im, stream=True)
+
+            if not ret or im is None:
+                if self.verbose:
+                    print("Error: Unable to read frame. Exiting...")
+                break
 
             yoloDetections = np.empty((0, 6))
 
@@ -156,40 +161,44 @@ class VehicleCounter:
                             yoloDetections = np.vstack((yoloDetections, currentArray))
 
                 # Assigning tracking IDs to the detected objects
-                self.update_tracker(self.vehicleTracker, yoloDetections, img)
+                self.update_tracker(self.vehicleTracker, yoloDetections, im)
 
                 # Drawing the lines
                 if self.show_img:
-                    cv2.line(img, (self.linePosition[0], self.linePosition[1]),
+                    cv2.line(im, (self.linePosition[0], self.linePosition[1]),
                              (self.linePosition[2], self.linePosition[3]), (0, 0, 255), 2)
-                    cv2.line(img, (self.linePosition[0] - self.offset, self.linePosition[1]),
+                    cv2.line(im, (self.linePosition[0] - self.offset, self.linePosition[1]),
                              (self.linePosition[2] - self.offset, self.linePosition[3]),
                              (153, 153, 255), 1)
-                    cv2.line(img, (self.linePosition[0] + self.offset, self.linePosition[1]),
+                    cv2.line(im, (self.linePosition[0] + self.offset, self.linePosition[1]),
                              (self.linePosition[2] + self.offset, self.linePosition[3]),
                              (153, 153, 255), 1)
 
                 # Displaying counters
                 if self.show_img:
-                    cvzone.putTextRect(img, f'{"car:":<13}{len(self.carCount)}', (20, 600), scale=1.2, thickness=1,
+                    cvzone.putTextRect(im, f'{"car:":<13}{len(self.carCount)}', (20, 600), scale=1.2, thickness=1,
                                        offset=2, colorR=(0, 0, 0))
-                    cvzone.putTextRect(img, f'{"motorbike:":<12}{len(self.motorbikeCount)}', (20, 620), scale=1.2,
+                    cvzone.putTextRect(im, f'{"motorbike:":<12}{len(self.motorbikeCount)}', (20, 620), scale=1.2,
                                        thickness=1, offset=2,
                                        colorR=(0, 0, 0))
-                    cvzone.putTextRect(img, f'{"truck:":<13}{len(self.truckCount)}', (20, 640), scale=1.2,
+                    cvzone.putTextRect(im, f'{"truck:":<13}{len(self.truckCount)}', (20, 640), scale=1.2,
                                        thickness=1, offset=2, colorR=(0, 0, 0))
-                    cvzone.putTextRect(img, f'{"bus:":<13}{len(self.busCount)}', (20, 660), scale=1.2, thickness=1,
+                    cvzone.putTextRect(im, f'{"bus:":<13}{len(self.busCount)}', (20, 660), scale=1.2, thickness=1,
                                        offset=2,
                                        colorR=(0, 0, 0))
-
-                print(f'{"car:":<12}{len(self.carCount)}')
-                print(f'{"motorbike:":<12}{len(self.motorbikeCount)}')
-                print(f'{"truck:":<12}{len(self.truckCount)}')
-                print(f'{"bus:":<12}{len(self.busCount)}')
+                if self.verbose:
+                    print(f'{"car:":<12}{len(self.carCount)}')
+                    print(f'{"motorbike:":<12}{len(self.motorbikeCount)}')
+                    print(f'{"truck:":<12}{len(self.truckCount)}')
+                    print(f'{"bus:":<12}{len(self.busCount)}')
 
                 if self.show_img:
-                    cv2.imshow("Vehicle counter", img)
-                cv2.waitKey(1)
+                    cv2.imshow("Vehicle counter", im)
+                    cv2.waitKey(1)
+
+        cv2.destroyAllWindows()
+
+        return len(self.carCount), len(self.motorbikeCount), len(self.busCount), len(self.truckCount)
 
 
 if __name__ == "__main__":

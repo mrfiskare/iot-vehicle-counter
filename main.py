@@ -22,6 +22,7 @@ def convert_to_iso(timestamp_str):
     return timestamp.isoformat()
 
 output_folder = "C:/videos/output"
+# output_folder = "C:\\Users\\pi\\git\\pte-yolo-node\\videos"
 json_folder = "C:/videos/unprocessed_json"
 json_file = "measurements.json"
 
@@ -36,14 +37,21 @@ if os.path.exists(json_path):
     with open(json_path, 'r') as file:
         data = json.load(file)
 
-vehicle_counter = VehicleCounter()
-
-for file_path in glob.glob(os.path.join(output_folder, '*.mkv')):
+for file_path in glob.glob(os.path.join(output_folder, '*.h264')):
     filename = os.path.basename(file_path)
     timestamp_str = os.path.splitext(filename)[0]
     timestamp_iso = convert_to_iso(timestamp_str)
 
-    carCount, motorbikeCount, busCount, truckCount = vehicle_counter.count(file_path)
+    vehicle_counter = VehicleCounter(file_path, "yolo_weights/yolov8n.pt", False, False)
+
+    run_result = vehicle_counter.run()
+    carCount, motorbikeCount, busCount, truckCount = run_result
+
+    print(f'{filename}')
+    print(f'{"car:":<12}{carCount}')
+    print(f'{"motorbike:":<12}{motorbikeCount}')
+    print(f'{"truck:":<12}{truckCount}')
+    print(f'{"bus:":<12}{busCount}\n')
 
     data.append({
         'timestamp': timestamp_iso,
