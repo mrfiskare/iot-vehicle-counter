@@ -1,10 +1,12 @@
 import os
 import json
 import glob
+import shutil
 import time
 import datetime
 from pytz import timezone
 from vehicle_counter import *
+
 
 def count_vehicles(file_path):
     # Your implementation for counting vehicles goes here
@@ -16,15 +18,17 @@ def count_vehicles(file_path):
 
     return carCount, motorbikeCount, busCount, truckCount
 
+
 def convert_to_iso(timestamp_str):
     timestamp = datetime.datetime.strptime(timestamp_str, "%Y-%m-%d_%H-%M")
     timestamp = timestamp.replace(tzinfo=timezone('Europe/Budapest'))
     return timestamp.isoformat()
 
-output_folder = "C:/videos/output"
-# output_folder = "C:\\Users\\pi\\git\\pte-yolo-node\\videos"
-json_folder = "C:/videos/unprocessed_json"
+
+output_folder = "C:\\videos\\output"
+json_folder = "C:\\videos\\unprocessed_json"
 json_file = "measurements.json"
+video_backup_dir = "C:\\videos\\day1_backup\\"
 
 if not os.path.exists(json_folder):
     os.makedirs(json_folder)
@@ -42,7 +46,7 @@ for file_path in glob.glob(os.path.join(output_folder, '*.h264')):
     timestamp_str = os.path.splitext(filename)[0]
     timestamp_iso = convert_to_iso(timestamp_str)
 
-    vehicle_counter = VehicleCounter(file_path, "yolo_weights/yolov8n.pt", False, False)
+    vehicle_counter = VehicleCounter(file_path, "yolo_weights\\yolov8n.pt", False, False)
 
     run_result = vehicle_counter.run()
     carCount, motorbikeCount, busCount, truckCount = run_result
@@ -51,7 +55,7 @@ for file_path in glob.glob(os.path.join(output_folder, '*.h264')):
     print(f'{"car:":<12}{carCount}')
     print(f'{"motorbike:":<12}{motorbikeCount}')
     print(f'{"truck:":<12}{truckCount}')
-    print(f'{"bus:":<12}{busCount}\n')
+    print(f'{"bus:":<12}{busCount}')
 
     data.append({
         'timestamp': timestamp_iso,
@@ -60,6 +64,8 @@ for file_path in glob.glob(os.path.join(output_folder, '*.h264')):
         'busCount': busCount,
         'truckCount': truckCount
     })
+
+    shutil.move(filename, video_backup_dir)
 
 with open(json_path, 'w') as file:
     json.dump(data, file, indent=4)
