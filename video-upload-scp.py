@@ -54,6 +54,7 @@ for file in glob.glob(SOURCE_DIR + "**/*.h264", recursive=True):
 
     if result.returncode == 0:
         print(f"Upload successful: {file}")
+        os.remove(file)
     else:
         print(f"Error uploading: {file}")
 
