@@ -1,3 +1,5 @@
+#!C:/Users/pi/git/pte-yolo-node/venv/Scripts/python.exe
+
 import os
 import json
 import glob
