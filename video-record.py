@@ -5,6 +5,7 @@ import picamera
 import os
 import psutil
 import shutil
+from pathlib import Path
 
 # Unload the bcm2835-v4l2 driver
 
@@ -12,6 +13,19 @@ subprocess.run(["sudo", "modprobe", "-r", "bcm2835-v4l2"])
 time.sleep(2)
 subprocess.run(["sudo", "modprobe", "bcm2835-v4l2"])
 time.sleep(2)
+
+LOCKFILE = "/tmp/upload_videos.lock"
+
+print("Checking lockfile...")
+
+# Check if the lock file exists, exit if it does
+if os.path.exists(LOCKFILE):
+    print("Another instance of the script is already running. Exiting.")
+    sys.exit(1)
+
+# Create the lock file
+print("Creating lockfile")
+Path(LOCKFILE).touch()
 
 # Set up the PiCamera object
 
@@ -82,31 +96,6 @@ for i in range(18):
 camera.close()
 time.sleep(5)
 
-# Initialize parameters
-
-# win_pw = sys.argv[1]
-# win_ip = sys.argv[2]
-
-# print("Uploading to Windows Server")
-# command = f"sshpass -p {win_pw} scp -P 22 /home/pi/recording/recorded/* pi@192.168.0.10:C:/videos/input"
-    
-# try:
-#     subprocess.check_output(command, shell=True, stderr=subprocess.STDOUT)
-#     print("File transfer completed successfully.")
-
-# except subprocess.CalledProcessError as e:
-#     print(f"Error occurred during file transfer: {e.output.decode('utf-8')}")
-
-# print("\n")
-
-# print("Cropping videos on Windows Server")
-# command = f"sshpass -p {win_pw} ssh -p 22 pi@{win_ip} 'python C:/scripts/video-crop.py'"
-    
-# try:
-#     subprocess.check_output(command, shell=True, stderr=subprocess.STDOUT)
-#     print("Video cropping completed successfully.")
-
-# except subprocess.CalledProcessError as e:
-#     print(f"Error occurred during video cropping: {e.output.decode('utf-8')}")
-
-# print("\n")
+# Remove the lock file
+os.remove(LOCKFILE)
+print("Lockfile removed\n")
