@@ -79,3 +79,5 @@ for file_path in glob.glob(os.path.join(output_folder, '*.h264')):
         with open(json_path, 'w') as file:
             json.dump(data, file, indent=4)
             file.close()
+
+        os.rename(file_path, video_backup_dir + filename)
