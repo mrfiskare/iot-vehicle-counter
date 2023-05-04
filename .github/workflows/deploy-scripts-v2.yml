@@ -19,9 +19,9 @@ jobs:
       - name: Check ssh-keyscan installation
         run: which ssh-keyscan || sudo apt-get update && sudo apt-get install -y openssh-client
           
-      - name: SSH -> adding remote to known hosts
-        # port: 10121
-        run: ssh-keyscan -p ${{ secrets.PORT }} -H ${{ secrets.HOST }}  >> ~/.ssh/known_hosts
+      # - name: SSH -> adding remote to known hosts
+      #   # port: 10121
+      #   run: ssh-keyscan -p ${{ secrets.PORT }} -H ${{ secrets.HOST }}  >> ~/.ssh/known_hosts
 
       - name: SSH -> removing old scripts
         uses: fifsky/ssh-action@master
