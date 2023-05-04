@@ -1,7 +1,7 @@
 name: Video Crop
 on:
   schedule:
-    - cron: "*/15 19-22 * * *"
+    - cron: "0 19-24 * * *"
 
 jobs:
   ssh-key-action:
@@ -16,10 +16,6 @@ jobs:
         with:
           key: ${{ secrets.PRIVATE_KEY }} 
           known_hosts: unnecessary
-          
-      # - name: SSH -> adding remote to known hosts
-      #   # port: 10128
-      #   run: ssh-keyscan -p ${{ secrets.PORT }} -H ${{ secrets.HOST }}  >> ~/.ssh/known_hosts
 
       - name: SSH -> running video recorder script
         uses: fifsky/ssh-action@master
