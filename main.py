@@ -4,8 +4,11 @@ import os
 import json
 import glob
 import shutil
+import sys
 import time
 import datetime
+from pathlib import Path
+
 from pytz import timezone
 from vehicle_counter import *
 
@@ -33,6 +36,20 @@ def is_timestamp_present(data, timestamp_iso):
             return True
     return False
 
+LOCKFILE = "C:\\tmp\\count.lock"
+
+print("Checking lockfile...")
+
+# Check if the lock file exists, exit if it does
+
+if os.path.exists(LOCKFILE):
+    print("Another instance of the script is already running. Exiting.")
+    sys.exit(1)
+
+# Create the lock file
+
+print("Creating lockfile")
+Path(LOCKFILE).touch()
 
 output_folder = "C:\\videos\\output"
 json_folder = "C:\\videos\\unprocessed_json"
@@ -79,3 +96,7 @@ for file_path in glob.glob(os.path.join(output_folder, '*.h264')):
         with open(json_path, 'w') as file:
             json.dump(data, file, indent=4)
             file.close()
+
+# Remove the lock file
+os.remove(LOCKFILE)
+print("Lockfile removed\n")
