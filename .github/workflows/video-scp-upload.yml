@@ -1,7 +1,7 @@
 name: Video SCP upload
 on:
   schedule:
-    - cron: "15 13 * * *"
+    - cron: "*/15 14-18 * * *"
 
 jobs:
   ssh-key-action:
