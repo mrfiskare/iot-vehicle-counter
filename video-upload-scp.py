@@ -6,7 +6,7 @@ import glob
 import subprocess
 from pathlib import Path
 
-LOCKFILE = "/tmp/upload_videos.lock"
+LOCKFILE = "/tmp/upload_videos_scp.lock"
 
 print("Checking lockfile...")
 

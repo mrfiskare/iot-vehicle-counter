@@ -14,7 +14,7 @@ time.sleep(2)
 subprocess.run(["sudo", "modprobe", "bcm2835-v4l2"])
 time.sleep(2)
 
-LOCKFILE = "/tmp/upload_videos.lock"
+LOCKFILE = "/tmp/record_videos.lock"
 
 print("Checking lockfile...")
 
