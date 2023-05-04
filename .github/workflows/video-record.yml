@@ -1,7 +1,7 @@
 name: Video record
 on:
   schedule:
-    - cron: "30 12 * * *"
+    - cron: "10 13 * * *"
 
 jobs:
   ssh-key-action:
