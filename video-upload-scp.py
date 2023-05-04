@@ -59,17 +59,6 @@ for file in glob.glob(SOURCE_DIR + "**/*.h264", recursive=True):
         print(f"Error uploading: {file}")
 
 
-print("Cropping videos on Windows Server")
-command = f"sshpass -p {PASSWORD} ssh -p 22 pi@{WINDOWS_SERVER_IP} 'python C:/scripts/video-crop.py'"
-    
-try:
-    subprocess.check_output(command, shell=True, stderr=subprocess.STDOUT)
-    print("Video cropping completed successfully.")
-
-except subprocess.CalledProcessError as e:
-    print(f"Error occurred during video cropping: {e.output.decode('utf-8')}")
-
-
 # Remove the lock file
 os.remove(LOCKFILE)
 print("Lockfile removed\n")

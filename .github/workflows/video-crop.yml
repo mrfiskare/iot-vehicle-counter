@@ -1,11 +1,11 @@
-name: Video SCP upload
+name: Video Crop
 on:
   schedule:
     - cron: "*/15 19-24 * * *"
 
 jobs:
   ssh-key-action:
-    name: Video SCP upload
+    name: Video Crop
     runs-on: ubuntu-latest
     steps:
       - name: repo checkout
@@ -25,7 +25,7 @@ jobs:
         uses: fifsky/ssh-action@master
         with:
           command: |
-            python3 /home/pi/scripts/video-upload-scp.py ${{ secrets.WIN_IP }} ${{ secrets.WIN_PORT }} ${{ secrets.WIN_USER }} ${{ secrets.PASSWORD }} &
+            sshpass -p ${{ secrets.PASSWORD }} ssh -p 22 ${{ secrets.USER }}@${{ secrets.WIN_IP }} 'powershell.exe -Command "python C:/scripts/video-crop.py"' &
           host: ${{ secrets.HOST }}
           user: ${{ secrets.USER }}
           port: ${{ secrets.PORT }}

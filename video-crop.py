@@ -2,6 +2,22 @@ import os
 import sys
 import subprocess
 import time
+from pathlib import Path
+
+LOCKFILE = "/tmp/crop_videos.lock"
+
+print("Checking lockfile...")
+
+# Check if the lock file exists, exit if it does
+
+if os.path.exists(LOCKFILE):
+    print("Another instance of the script is already running. Exiting.")
+    sys.exit(1)
+
+# Create the lock file
+
+print("Creating lockfile")
+Path(LOCKFILE).touch()
 
 input_directory = "C:\\videos\\input\\"
 output_directory = "C:\\videos\\output\\"
@@ -25,18 +41,6 @@ for filename in os.listdir(input_directory):
         # Cropping the video to 720p
 
         print("cropping video ...")
-
-        # Lossless MKV conversion
-        # output_filename = output_directory + timestamp + ".mkv"
-        # ffmpeg_command = [
-        #     "ffmpeg",
-        #     "-i", input_file,
-        #     "-vf", "crop=1280:720:640:360",
-        #     "-c:v", "ffv1",
-        #     "-an",
-        #     "-r", "30",
-        #     output_filename
-        # ]
 
         # Lossy H264 conversion
 
@@ -73,3 +77,8 @@ for filename in os.listdir(input_directory):
             
             print(f"An error occurred while processing {input_file}")
             print(f"Error details: {result.stderr.decode('utf-8')}")
+
+
+# Remove the lock file
+os.remove(LOCKFILE)
+print("Lockfile removed\n")
