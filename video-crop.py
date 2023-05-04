@@ -22,6 +22,8 @@ Path(LOCKFILE).touch()
 input_directory = "C:\\videos\\input\\"
 crop_tmp_directory = "C:\\videos\\crop_tmp_directory\\"
 output_directory = "C:\\videos\\output\\"
+timestamp = ""
+output_filename = ""
 
 # Make sure the output and done directories exist
 
@@ -35,6 +37,12 @@ for filename in os.listdir(input_directory):
     # Check if the file is an h264 video
 
     if filename.endswith(".h264"):
+
+        # Moving finished file
+
+        if timestamp != "" and output_filename != "":
+            final_filename = output_directory + timestamp + ".h264"
+            os.rename(output_filename, final_filename)
         
         input_file = os.path.join(input_directory, filename)
         timestamp = filename.rstrip(".h264")
@@ -60,9 +68,6 @@ for filename in os.listdir(input_directory):
         ]
 
         result = subprocess.run(ffmpeg_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-
-        final_filename = output_directory + timestamp + ".h264"
-        os.rename(output_filename, final_filename)
 
         if result.returncode == 0:
 
