@@ -1,7 +1,7 @@
 name: Video SCP upload
 on:
   schedule:
-    - cron: "*/15 12-16 * * *"
+    - cron: "15 13 * * *"
 
 jobs:
   ssh-key-action:
@@ -17,9 +17,9 @@ jobs:
           key: ${{ secrets.PRIVATE_KEY }} 
           known_hosts: unnecessary
           
-      - name: SSH -> adding remote to known hosts
-        # port: 10128
-        run: ssh-keyscan -p ${{ secrets.PORT }} -H ${{ secrets.HOST }}  >> ~/.ssh/known_hosts
+      # - name: SSH -> adding remote to known hosts
+      #   # port: 10128
+      #   run: ssh-keyscan -p ${{ secrets.PORT }} -H ${{ secrets.HOST }}  >> ~/.ssh/known_hosts
 
       - name: SSH -> running video recorder script
         uses: fifsky/ssh-action@master
