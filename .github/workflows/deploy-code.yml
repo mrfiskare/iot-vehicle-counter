@@ -16,12 +16,12 @@ jobs:
           key: ${{ secrets.PRIVATE_KEY }} 
           known_hosts: unnecessary
 
-      - name: Check ssh-keyscan installation
-        run: which ssh-keyscan || sudo apt-get update && sudo apt-get install -y openssh-client
+      # - name: Check ssh-keyscan installation
+      #   run: which ssh-keyscan || sudo apt-get update && sudo apt-get install -y openssh-client
           
-      - name: SSH -> adding remote to known hosts
-        # port: 10128
-        run: ssh-keyscan -p ${{ secrets.PORT }} -H ${{ secrets.HOST }}  >> ~/.ssh/known_hosts
+      # - name: SSH -> adding remote to known hosts
+      #   # port: 10128
+      #   run: ssh-keyscan -p ${{ secrets.PORT }} -H ${{ secrets.HOST }}  >> ~/.ssh/known_hosts
 
       # - name: SSH -> deploying project to Pi
       #   uses: fifsky/ssh-action@master
