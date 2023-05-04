@@ -55,6 +55,8 @@ output_folder = "C:\\videos\\output"
 json_folder = "C:\\videos\\unprocessed_json"
 json_file = "measurements.json"
 video_backup_dir = "C:\\videos\\day1_backup\\"
+prev_file = ""
+filename = ""
 
 if not os.path.exists(json_folder):
     os.makedirs(json_folder)
@@ -68,6 +70,10 @@ if os.path.exists(json_path):
         data = json.load(file)
 
 for file_path in glob.glob(os.path.join(output_folder, '*.h264')):
+
+    if prev_file != "" and filename != "":
+        os.rename(file_path, video_backup_dir + filename)
+
     filename = os.path.basename(file_path)
     timestamp_str = os.path.splitext(filename)[0]
     timestamp_iso = convert_to_iso(timestamp_str)
