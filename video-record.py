@@ -60,7 +60,7 @@ if not os.path.exists(done_directory) :
 
 # Record videos splitted into parts
 
-for i in range(19):
+for i in range(18):
 
     # Get the available space on the root partition in GB
 
