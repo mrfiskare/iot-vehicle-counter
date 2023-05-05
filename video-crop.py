@@ -45,7 +45,7 @@ for filename in os.listdir(input_directory):
             os.rename(output_filename, final_filename)
         
         input_file = os.path.join(input_directory, filename)
-        timestamp = filename.rstrip(".h264")
+        timestamp = filename[:-4]
         
         # Cropping the video to 720p
 
