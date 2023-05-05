@@ -44,7 +44,6 @@ for file in glob.glob(SOURCE_DIR + "**/*.h264", recursive=True):
             "scp",
             "-P",
             SSH_PORT,
-            "-c arcfour,blowfish-cbc"
             "-o",
             "StrictHostKeyChecking=no",
             file,
