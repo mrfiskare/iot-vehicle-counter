@@ -45,7 +45,7 @@ for filename in os.listdir(input_directory):
             os.rename(output_filename, final_filename)
         
         input_file = os.path.join(input_directory, filename)
-        timestamp = filename[:-4]
+        timestamp = filename[:-5]
         
         # Cropping the video to 720p
 
