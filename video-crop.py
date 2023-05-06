@@ -4,7 +4,7 @@ import subprocess
 import time
 from pathlib import Path
 
-LOCKFILE = "/tmp/crop_videos.lock"
+LOCKFILE = "C:\\videos\\crop_videos.lock"
 
 print("Checking lockfile...")
 
