@@ -1,12 +1,13 @@
 name: Video Crop
 on:
   schedule:
-    - cron: "50 11 * * *"
+    - cron: "35 12 * * *"
 
 jobs:
   ssh-key-action:
     name: Video Crop
     runs-on: ubuntu-latest
+    timeout-minutes: 120
     steps:
       - name: repo checkout
         uses: actions/checkout@master
