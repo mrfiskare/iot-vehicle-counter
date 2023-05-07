@@ -1,7 +1,7 @@
 name: Video Crop
 on:
   schedule:
-    - cron: "50 10 * * *"
+    - cron: "50 11 * * *"
 
 jobs:
   ssh-key-action:
@@ -21,7 +21,7 @@ jobs:
         uses: fifsky/ssh-action@master
         with:
           command: |
-            sshpass -p ${{ secrets.PASSWORD }} ssh -p 22 -o ServerAliveInterval=30 ${{ secrets.USER }}@${{ secrets.WIN_IP }} 'powershell.exe -Command "python C:/scripts/video-crop.py"' &
+            sshpass -p ${{ secrets.PASSWORD }} ssh -p 22 -o ServerAliveInterval=30 ${{ secrets.USER }}@${{ secrets.WIN_IP }} 'python C:/scripts/video-crop.py'
           host: ${{ secrets.HOST }}
           user: ${{ secrets.USER }}
           port: ${{ secrets.PORT }}
