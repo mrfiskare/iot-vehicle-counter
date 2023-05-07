@@ -27,7 +27,7 @@ output_directory = "C:\\videos\\output\\"
 
 # Make sure the output and done directories exist
 
-os.makedirs(crop_tmp_directory, exist_ok=True)
+#os.makedirs(crop_tmp_directory, exist_ok=True)
 os.makedirs(output_directory, exist_ok=True)
 
 # Iterate over all files in the input directory
