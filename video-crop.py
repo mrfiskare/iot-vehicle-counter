@@ -20,10 +20,10 @@ print("Creating lockfile")
 Path(LOCKFILE).touch()
 
 input_directory = "C:\\videos\\input\\"
-crop_tmp_directory = "C:\\videos\\crop_tmp_directory\\"
+# crop_tmp_directory = "C:\\videos\\crop_tmp_directory\\"
 output_directory = "C:\\videos\\output\\"
-timestamp = ""
-output_filename = ""
+# timestamp = ""
+# output_filename = ""
 
 # Make sure the output and done directories exist
 
@@ -40,9 +40,9 @@ for filename in os.listdir(input_directory):
 
         # Moving finished file
 
-        if timestamp != "" and output_filename != "":
-            final_filename = output_directory + timestamp + ".h264"
-            os.rename(output_filename, final_filename)
+        # if timestamp != "" and output_filename != "":
+        #     final_filename = output_directory + timestamp + ".h264"
+        #     os.rename(output_filename, final_filename)
         
         input_file = os.path.join(input_directory, filename)
         timestamp = filename[:-5]
@@ -53,7 +53,7 @@ for filename in os.listdir(input_directory):
 
         # Lossy H264 conversion
 
-        output_filename = crop_tmp_directory + timestamp + ".h264"
+        output_filename = output_directory + timestamp + ".h264"
 
         ffmpeg_command = [
             "ffmpeg",
@@ -71,7 +71,7 @@ for filename in os.listdir(input_directory):
 
         if result.returncode == 0:
 
-            print(f"Successfully processed {input_file} and saved it as {final_filename}", file=sys.stdout, flush=True)
+            print(f"Successfully processed {input_file} and saved it as {filename}", file=sys.stdout, flush=True)
 
             # Delete the input file
 
