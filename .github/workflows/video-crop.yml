@@ -1,7 +1,7 @@
 name: Video Crop
 on:
   schedule:
-    - cron: "45 9 * * *"
+    - cron: "32 10 * * *"
 
 jobs:
   ssh-key-action:
