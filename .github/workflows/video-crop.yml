@@ -22,7 +22,7 @@ jobs:
         uses: fifsky/ssh-action@master
         with:
           command: |
-            sshpass -p ${{ secrets.PASSWORD }} ssh -p 22 -o ServerAliveInterval=30 ${{ secrets.USER }}@${{ secrets.WIN_IP }} 'python C:/scripts/video-crop.py'
+            sshpass -p ${{ secrets.PASSWORD }} ssh -p 22 -o ServerAliveInterval=30 ${{ secrets.USER }}@${{ secrets.WIN_IP }} 'nohup python C:/scripts/video-crop.py > C:/scripts/video-crop.log 2>&1 &'
           host: ${{ secrets.HOST }}
           user: ${{ secrets.USER }}
           port: ${{ secrets.PORT }}
