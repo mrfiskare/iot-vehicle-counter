@@ -5,6 +5,7 @@ on:
 jobs:
   ssh-key-action:
     name: Deploying scripts V2
+    if: ${{ false }}
     runs-on: ubuntu-latest
     steps:
       - name: repo checkout
