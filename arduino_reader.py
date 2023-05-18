@@ -11,7 +11,6 @@ class ArduinoReader:
         self.baud_rate = baud_rate
         self.serial_data = serial.Serial(serial_port, baud_rate)
         self.measurement = {
-            "measurement_id": 0,
             "carbon_monoxide": 0,
             "air_quality": 0
         }
@@ -19,12 +18,10 @@ class ArduinoReader:
 
     def read_from_arduino(self, timestamp):
         arduino_data = self.serial_data.readline().decode('utf-8').strip()
-        self.measurement = json.loads(arduino_data)
-        self.measurement['timestamp'] = timestamp
-        
-        print('\n')
-        print(self.measurement)
-        
+        measurement_dict = json.loads(arduino_data)
+        self.measurement["carbon_monoxide"] = measurement_dict["carbon_monoxide"]
+        self.measurement["air_quality"] = measurement_dict["air_quality"]
+        self.measurement['timestamp'] = timestamp     
         return json.dumps(self.measurement)
         
         

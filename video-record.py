@@ -6,7 +6,7 @@ import os
 import psutil
 import shutil
 from pathlib import Path
-from ArduinoReader import *
+from arduino_reader import *
 
 # Unload the bcm2835-v4l2 driver
 
@@ -92,6 +92,7 @@ for i in range(8):
 
         arduino = ArduinoReader('/dev/ttyACM0', 9600)
         arduino.save_to_file(arduino.read_from_arduino(timestamp))
+        arduino.close()
 
         # Move the file to the captured folder
 
