@@ -11,6 +11,7 @@ from pathlib import Path
 
 from pytz import timezone
 from vehicle_counter import *
+from weather import *
 
 
 def count_vehicles(file_path):
@@ -81,22 +82,37 @@ for file_path in glob.glob(os.path.join(output_folder, '*.h264')):
     if not is_timestamp_present(data, timestamp_iso):
 
         vehicle_counter = VehicleCounter(file_path, "yolo_weights\\yolov8n.pt", False, False)
-
         run_result = vehicle_counter.run()
         carCount, motorbikeCount, busCount, truckCount = run_result
+
+        requestAPI = WeatherAPI(timestamp_iso)
+        temperature = requestAPI.get_temperature()
+        precipitation = requestAPI.get_precipitation()
+
+        air_quality_sensor = 0
+        co2_sensor = 0
 
         print(f'{filename}')
         print(f'{"car:":<12}{carCount}')
         print(f'{"motorbike:":<12}{motorbikeCount}')
         print(f'{"truck:":<12}{truckCount}')
         print(f'{"bus:":<12}{busCount}')
+        print(f'{"temperature:":<12}{truckCount}')
+        print(f'{"precipitation:":<12}{busCount}')
+        print(f'{"air_quality_sensor:":<12}{truckCount}')
+        print(f'{"co2_sensor:":<12}{busCount}')
 
         data.append({
             'timestamp': timestamp_iso,
             'carCount': carCount,
             'motorbikeCount': motorbikeCount,
             'busCount': busCount,
-            'truckCount': truckCount
+            'truckCount': truckCount,
+            'temperature': temperature,
+            'precipitation': precipitation,
+            'air_quality_sensor': temperature,
+            'co2_sensor': precipitation,
+
         })
 
         with open(json_path, 'w') as file:
