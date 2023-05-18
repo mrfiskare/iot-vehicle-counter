@@ -1,12 +1,11 @@
 name: Count vehicles
 on:
   schedule:
-    - cron: "0 22 * * *"
+    - cron: "45 23 * * *"
 
 jobs:
   ssh-key-action:
     name: Count vehicles
-    if: ${{ false }}
     runs-on: ubuntu-latest
     steps:
       - name: repo checkout
@@ -22,7 +21,7 @@ jobs:
         uses: fifsky/ssh-action@master
         with:
           command: |
-            sshpass -p ${{ secrets.PASSWORD }} ssh -p 22 ${{ secrets.USER }}@${{ secrets.WIN_IP }} 'powershell.exe -Command "C:/Users/pi/git/pte-yolo-node/venv/Scripts/python.exe C:/Users/pi/git/pte-yolo-node/main.py"' &
+            sshpass -p ${{ secrets.PASSWORD }} ssh -p 22 ${{ secrets.USER }}@${{ secrets.WIN_IP }} 'cmd /k "C:\Users\pi\git\pte-yolo-node\venv\Scripts\activate && C:\Users\pi\git\pte-yolo-node\venv\Scripts\python.exe C:\Users\pi\git\pte-yolo-node\main.py"' &
           host: ${{ secrets.HOST }}
           user: ${{ secrets.USER }}
           port: ${{ secrets.PORT }}
