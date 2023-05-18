@@ -26,7 +26,7 @@ class ArduinoReader:
         
         
     def save_to_file(self, data):
-        json_folder = "/home/pi/json/sensors.json"
+        json_folder = "/home/pi/json"
         json_file = "sensors.json"
 
         if not os.path.exists(json_folder):
