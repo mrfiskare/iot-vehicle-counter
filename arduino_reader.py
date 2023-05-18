@@ -26,24 +26,30 @@ class ArduinoReader:
         
         
     def save_to_file(self, data):
-        file_path = "/home/pi/json/sensors.json"
+        json_folder = "/home/pi/json/sensors.json"
+        json_file = "sensors.json"
 
-        # Create the folder if it doesn't exist
-        folder_path = os.path.dirname(file_path)
-        os.makedirs(folder_path, exist_ok=True)
+        if not os.path.exists(json_folder):
+            os.makedirs(json_folder)
 
-        # Check if the file already exists
-        file_exists = os.path.isfile(file_path)
+        json_path = os.path.join(json_folder, json_file)
 
-        # Determine the write mode based on file existence
-        write_mode = "a" if file_exists else "w"
+        data = []
 
-        # Append or create the file and write the data
-        with open(file_path, write_mode) as file:
-            if file_exists:
-                file.write(",\n")
+        if os.path.exists(json_path):
+            with open(json_path, 'r') as file:
+                data = json.load(file)
 
-            file.write(data)
+        data.append({
+            'timestamp': timestamp,
+            'air_quality': air_quality,
+            'carbon_monoxide': carbon_monoxide
+        })
+
+        with open(json_path, 'w') as file:
+            json.dump(data, file, indent=4)
+            file.close()
+
 
         print("Data saved to sensors.json")
 

@@ -21,7 +21,6 @@ Path(LOCKFILE).touch()
 
 SOURCE_DIR = "/home/pi/recording/recorded/"
 DEST_DIR = "C:/videos/input"
-#FINAL_DIR = "C:/videos/input_tmp"
 
 if len(sys.argv) < 5:
     print("Usage: script.py <WINDOWS_SERVER_IP> <SSH_PORT> <SSH_USER> <PASSWORD>")
