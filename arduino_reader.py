@@ -41,9 +41,9 @@ class ArduinoReader:
                 data = json.load(file)
 
         data.append({
-            'timestamp': timestamp,
-            'air_quality': air_quality,
-            'carbon_monoxide': carbon_monoxide
+            'timestamp': self.measurement['timestamp'],
+            'air_quality': self.measurement["air_quality"],
+            'carbon_monoxide': self.measurement["carbon_monoxide"]
         })
 
         with open(json_path, 'w') as file:
