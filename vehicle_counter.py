@@ -129,13 +129,14 @@ class VehicleCounter:
     def run(self):
         while True:
             ret, im = self.cap.read()
-            img_region = cv2.bitwise_and(im, self.mask)
-            results = self.model(img_region, stream=True)
 
             if not ret or im is None:
                 if self.verbose:
                     print("Error: Unable to read frame. Exiting...")
                 break
+
+            img_region = cv2.bitwise_and(im, self.mask)
+            results = self.model(img_region, stream=True)
 
             yoloDetections = np.empty((0, 6))
 

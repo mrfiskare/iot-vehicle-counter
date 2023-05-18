@@ -7,6 +7,7 @@ import shutil
 import sys
 import time
 import datetime
+import re
 from pathlib import Path
 
 from pytz import timezone
@@ -28,7 +29,9 @@ def count_vehicles(file_path):
 def convert_to_iso(timestamp_str):
     timestamp = datetime.strptime(timestamp_str, "%Y-%m-%d_%H-%M")
     timestamp = timestamp.replace(tzinfo=timezone('Europe/Budapest'))
-    return timestamp.isoformat()
+    iso_timestamp = timestamp.isoformat()
+    iso_timestamp = re.sub(r'\+\d{2}:\d{2}$', '', iso_timestamp)
+    return iso_timestamp
 
 
 def is_timestamp_present(data, timestamp_iso):
@@ -52,7 +55,7 @@ if os.path.exists(LOCKFILE):
 print("Creating lockfile")
 Path(LOCKFILE).touch()
 
-output_folder = "C:\\videos\\input"
+output_folder = "C:\\videos\\output"
 json_folder = "C:\\videos\\final_json"
 json_file = "measurements.json"
 sensor_file_path = "C:\\videos\\sensor_json\\sensors.json"
@@ -82,7 +85,7 @@ for file_path in glob.glob(os.path.join(output_folder, '*.h264')):
 
     if not is_timestamp_present(data, timestamp_iso):
 
-        vehicle_counter = VehicleCounter(file_path, "yolo_weights\\yolov8n.pt", False, False)
+        vehicle_counter = VehicleCounter(file_path, "C:\\Users\\pi\\git\\pte-yolo-node\\yolo_weights\\yolov8n.pt", False, False)
         run_result = vehicle_counter.run()
         carCount, motorbikeCount, busCount, truckCount = run_result
 
@@ -121,8 +124,7 @@ for file_path in glob.glob(os.path.join(output_folder, '*.h264')):
             'temperature': temperature,
             'precipitation': precipitation,
             'air_quality': air_quality,
-            'carbon_monoxide': carbon_monoxide,
-
+            'carbon_monoxide': carbon_monoxide
         })
 
         with open(json_path, 'w') as file:
@@ -132,4 +134,4 @@ for file_path in glob.glob(os.path.join(output_folder, '*.h264')):
 
 # Remove the lock file
 os.remove(LOCKFILE)
-print("Lockfile removed\n")
+print("\nLockfile removed\n")

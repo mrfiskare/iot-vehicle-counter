@@ -1,3 +1,5 @@
+import re
+
 import requests
 from datetime import datetime
 import pytz
@@ -9,8 +11,10 @@ class WeatherAPI:
 
     def get_unixtime(self):
         dt = datetime.fromisoformat(self.iso_datetime)
+        dt = dt.replace(minute=0)
         unixtime = dt.replace(tzinfo=pytz.UTC).timestamp()
         return int(unixtime)
+
 
     def get_weather_data(self):
         iso_date = self.iso_datetime.split('T')[0]  # get the date part
@@ -54,6 +58,7 @@ class WeatherAPI:
 
 
 # Test
-api = WeatherAPI('2023-05-18T12:00:00')
+#api = WeatherAPI('2023-05-18T12:00:00')
+api = WeatherAPI('2023-05-18T21:12:00+01:16')
 print(api.get_temperature())
 print(api.get_precipitation())
