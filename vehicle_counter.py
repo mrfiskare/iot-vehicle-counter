@@ -7,7 +7,7 @@ from sort import *
 
 
 class VehicleCounter:
-    def __init__(self, video_path="videos/2023-05-02_10-5.mkv", yolo_weights_path="yolo_weights/yolov8n.pt", show_img=False, verbose=True):
+    def __init__(self, video_path="videos/10s_1080p.h264", yolo_weights_path="yolo_weights/yolov8n.pt", show_img=True, verbose=True):
         self.video_path = video_path
         self.cap = cv2.VideoCapture(video_path)
         self.show_img = show_img
@@ -29,6 +29,8 @@ class VehicleCounter:
                           "vase", "scissors", "teddy bear", "hair drier", "toothbrush"]
         self.vehicleTypes = ["car", "motorbike", "bus", "truck"]
 
+        self.mask = cv2.imread("mask.png")
+
         # Initializing Sort tracker made by abewley
         max_age = 20
         min_hits = 3
@@ -37,7 +39,7 @@ class VehicleCounter:
         self.vehicleTracker = Sort(max_age=max_age, min_hits=min_hits, iou_threshold=iou_threshold)
 
         # Line positions
-        self.linePosition = [640, 0, 640, 720]
+        self.linePosition = [1460, 399, 1460, 1080]
         self.offset = 30
         self.carCount = []
         self.motorbikeCount = []
@@ -101,10 +103,10 @@ class VehicleCounter:
 
             # Showing tracking bounding box, tracked object's id
             if self.show_img:
-                cvzone.cornerRect(img, (t_x1, t_y1, t_w, t_h), l=8, t=2, rt=1, colorR=(255, 0, 0))
+                cvzone.cornerRect(img, (t_x1, t_y1, t_w, t_h), l=8, t=3, rt=2, colorR=(255, 0, 0))
                 cvzone.putTextRect(img, f'[{tracking_id}] {cls_name}',
                                    (max(0, t_x1), max(30, t_y1)),
-                                   scale=0.8, thickness=1, offset=2, colorR=(0, 0, 102))
+                                   scale=1.4, thickness=2, offset=2, colorR=(0, 0, 102))
 
             # Center points
             t_cx, t_cy = t_x1 + t_w // 2, t_y1 + t_h // 2
@@ -127,7 +129,8 @@ class VehicleCounter:
     def run(self):
         while True:
             ret, im = self.cap.read()
-            results = self.model(im, stream=True)
+            img_region = cv2.bitwise_and(im, self.mask)
+            results = self.model(img_region, stream=True)
 
             if not ret or im is None:
                 if self.verbose:
@@ -163,29 +166,29 @@ class VehicleCounter:
                             yoloDetections = np.vstack((yoloDetections, currentArray))
 
                 # Assigning tracking IDs to the detected objects
-                self.update_tracker(self.vehicleTracker, yoloDetections, im)
+                self.update_tracker(self.vehicleTracker, yoloDetections, img_region)
 
                 # Drawing the lines
                 if self.show_img:
-                    cv2.line(im, (self.linePosition[0], self.linePosition[1]),
+                    cv2.line(img_region, (self.linePosition[0], self.linePosition[1]),
                              (self.linePosition[2], self.linePosition[3]), (0, 0, 255), 2)
-                    cv2.line(im, (self.linePosition[0] - self.offset, self.linePosition[1]),
+                    cv2.line(img_region, (self.linePosition[0] - self.offset, self.linePosition[1]),
                              (self.linePosition[2] - self.offset, self.linePosition[3]),
                              (153, 153, 255), 1)
-                    cv2.line(im, (self.linePosition[0] + self.offset, self.linePosition[1]),
+                    cv2.line(img_region, (self.linePosition[0] + self.offset, self.linePosition[1]),
                              (self.linePosition[2] + self.offset, self.linePosition[3]),
                              (153, 153, 255), 1)
 
                 # Displaying counters
                 if self.show_img:
-                    cvzone.putTextRect(im, f'{"car:":<13}{len(self.carCount)}', (20, 600), scale=1.2, thickness=1,
+                    cvzone.putTextRect(img_region, f'{"car:":<13}{len(self.carCount)}', (1020, 920), scale=2, thickness=1,
                                        offset=2, colorR=(0, 0, 0))
-                    cvzone.putTextRect(im, f'{"motorbike:":<12}{len(self.motorbikeCount)}', (20, 620), scale=1.2,
+                    cvzone.putTextRect(img_region, f'{"motorbike:":<12}{len(self.motorbikeCount)}', (1020, 960), scale=2,
                                        thickness=1, offset=2,
                                        colorR=(0, 0, 0))
-                    cvzone.putTextRect(im, f'{"truck:":<13}{len(self.truckCount)}', (20, 640), scale=1.2,
+                    cvzone.putTextRect(img_region, f'{"truck:":<13}{len(self.truckCount)}', (1020, 1000), scale=2,
                                        thickness=1, offset=2, colorR=(0, 0, 0))
-                    cvzone.putTextRect(im, f'{"bus:":<13}{len(self.busCount)}', (20, 660), scale=1.2, thickness=1,
+                    cvzone.putTextRect(img_region, f'{"bus:":<13}{len(self.busCount)}', (1020, 1040), scale=2, thickness=1,
                                        offset=2,
                                        colorR=(0, 0, 0))
                 if self.verbose:
@@ -195,7 +198,19 @@ class VehicleCounter:
                     print(f'{"bus:":<12}{len(self.busCount)}')
 
                 if self.show_img:
-                    cv2.imshow("Vehicle counter", im)
+                    # Define the scaling factor for the window
+                    scaling_factor = 0.75  # You can adjust this value to your desired scale
+
+                    # Calculate the scaled window size
+                    scaled_width = int(img_region.shape[1] * scaling_factor)
+                    scaled_height = int(img_region.shape[0] * scaling_factor)
+
+                    # Create a named window with the scaled size
+                    cv2.namedWindow("Scaled Window", cv2.WINDOW_NORMAL)
+                    cv2.resizeWindow("Scaled Window", scaled_width, scaled_height)
+
+                    cv2.imshow("Scaled Window", img_region)
+                    # cv2.imshow("Vehicle counter", img_region)
                     cv2.waitKey(1)
 
                 # Clearing the screen
