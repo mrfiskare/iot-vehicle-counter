@@ -6,6 +6,7 @@ import os
 import psutil
 import shutil
 from pathlib import Path
+from ArduinoReader import *
 
 # Unload the bcm2835-v4l2 driver
 
@@ -76,7 +77,7 @@ for i in range(8):
 
     else:
 
-    # Set the output filename to the current timestamp
+        # Set the output filename to the current timestamp
 
         timestamp = time.strftime("%Y-%m-%d_%H-%M")
         timestamped_file = timestamp + ".h264"
@@ -86,6 +87,11 @@ for i in range(8):
         camera.wait_recording(recording_length)
         camera.stop_recording()
         time.sleep(2)
+
+        # Read Arduino values
+
+        arduino = ArduinoReader('/dev/ttyACM0', 9600)
+        arduino.save_to_file(arduino.read_from_arduino(timestamp))
 
         # Move the file to the captured folder
 
