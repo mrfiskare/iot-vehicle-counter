@@ -12,7 +12,6 @@ from pathlib import Path
 from pytz import timezone
 from vehicle_counter import *
 from weather import *
-from arduino_reader import *
 
 
 def count_vehicles(file_path):
@@ -86,18 +85,12 @@ for file_path in glob.glob(os.path.join(output_folder, '*.h264')):
         run_result = vehicle_counter.run()
         carCount, motorbikeCount, busCount, truckCount = run_result
 
-        # Get the temp and precipitation from open API
         requestAPI = WeatherAPI(timestamp_iso)
         temperature = requestAPI.get_temperature()
         precipitation = requestAPI.get_precipitation()
 
-        # Set the arduino port and baud rate
-        arduino = ArduinoReader('/dev/ttyACM0', 9600)
-
-        # Get the sensor values
-        measurement_id = arduino.get_measurement_id()
-        mq7_value = arduino.get_co2_sensor()
-        mq135_value = arduino.get_air_quality_sensor()
+        air_quality_sensor = 0
+        co2_sensor = 0
 
         print(f'{filename}')
         print(f'{"car:":<12}{carCount}')
