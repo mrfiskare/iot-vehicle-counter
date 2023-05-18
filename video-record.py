@@ -37,7 +37,7 @@ camera.framerate = 30
 
 # Set the recording length (in seconds)
 
-recording_length = 60 * 10
+recording_length = 60 * 60
 
 # Set the output directories
 
@@ -60,7 +60,7 @@ if not os.path.exists(done_directory) :
 
 # Record videos splitted into parts
 
-for i in range(12):
+for i in range(8):
 
     # Get the available space on the root partition in GB
 
