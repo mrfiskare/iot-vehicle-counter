@@ -26,7 +26,7 @@ def count_vehicles(file_path):
 
 
 def convert_to_iso(timestamp_str):
-    timestamp = datetime.datetime.strptime(timestamp_str, "%Y-%m-%d_%H-%M")
+    timestamp = datetime.strptime(timestamp_str, "%Y-%m-%d_%H-%M")
     timestamp = timestamp.replace(tzinfo=timezone('Europe/Budapest'))
     return timestamp.isoformat()
 
