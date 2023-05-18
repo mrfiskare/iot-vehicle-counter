@@ -39,7 +39,7 @@ class VehicleCounter:
         self.vehicleTracker = Sort(max_age=max_age, min_hits=min_hits, iou_threshold=iou_threshold)
 
         # Line positions
-        self.linePosition = [1460, 399, 1460, 1080]
+        self.linePosition = [500, 0, 500, 682]
         self.offset = 30
         self.carCount = []
         self.motorbikeCount = []
@@ -128,6 +128,7 @@ class VehicleCounter:
 
     def run(self):
         while True:
+            # ret, im = self.cap.read()
             ret, im = self.cap.read()
 
             if not ret or im is None:
@@ -135,8 +136,9 @@ class VehicleCounter:
                     print("Error: Unable to read frame. Exiting...")
                 break
 
-            img_region = cv2.bitwise_and(im, self.mask)
-            results = self.model(img_region, stream=True)
+            roi = im[398:1080, 999:1920]
+
+            results = self.model(roi, stream=True)
 
             yoloDetections = np.empty((0, 6))
 
@@ -167,29 +169,29 @@ class VehicleCounter:
                             yoloDetections = np.vstack((yoloDetections, currentArray))
 
                 # Assigning tracking IDs to the detected objects
-                self.update_tracker(self.vehicleTracker, yoloDetections, img_region)
+                self.update_tracker(self.vehicleTracker, yoloDetections, roi)
 
                 # Drawing the lines
                 if self.show_img:
-                    cv2.line(img_region, (self.linePosition[0], self.linePosition[1]),
+                    cv2.line(roi, (self.linePosition[0], self.linePosition[1]),
                              (self.linePosition[2], self.linePosition[3]), (0, 0, 255), 2)
-                    cv2.line(img_region, (self.linePosition[0] - self.offset, self.linePosition[1]),
+                    cv2.line(roi, (self.linePosition[0] - self.offset, self.linePosition[1]),
                              (self.linePosition[2] - self.offset, self.linePosition[3]),
                              (153, 153, 255), 1)
-                    cv2.line(img_region, (self.linePosition[0] + self.offset, self.linePosition[1]),
+                    cv2.line(roi, (self.linePosition[0] + self.offset, self.linePosition[1]),
                              (self.linePosition[2] + self.offset, self.linePosition[3]),
                              (153, 153, 255), 1)
 
                 # Displaying counters
                 if self.show_img:
-                    cvzone.putTextRect(img_region, f'{"car:":<13}{len(self.carCount)}', (1020, 920), scale=2, thickness=1,
+                    cvzone.putTextRect(roi, f'{"car:":<13}{len(self.carCount)}', (20, 540), scale=2, thickness=1,
                                        offset=2, colorR=(0, 0, 0))
-                    cvzone.putTextRect(img_region, f'{"motorbike:":<12}{len(self.motorbikeCount)}', (1020, 960), scale=2,
+                    cvzone.putTextRect(roi, f'{"motorbike:":<12}{len(self.motorbikeCount)}', (20, 580), scale=2,
                                        thickness=1, offset=2,
                                        colorR=(0, 0, 0))
-                    cvzone.putTextRect(img_region, f'{"truck:":<13}{len(self.truckCount)}', (1020, 1000), scale=2,
+                    cvzone.putTextRect(roi, f'{"truck:":<13}{len(self.truckCount)}', (20, 620), scale=2,
                                        thickness=1, offset=2, colorR=(0, 0, 0))
-                    cvzone.putTextRect(img_region, f'{"bus:":<13}{len(self.busCount)}', (1020, 1040), scale=2, thickness=1,
+                    cvzone.putTextRect(roi, f'{"bus:":<13}{len(self.busCount)}', (20, 660), scale=2, thickness=1,
                                        offset=2,
                                        colorR=(0, 0, 0))
                 if self.verbose:
@@ -203,14 +205,14 @@ class VehicleCounter:
                     scaling_factor = 0.75  # You can adjust this value to your desired scale
 
                     # Calculate the scaled window size
-                    scaled_width = int(img_region.shape[1] * scaling_factor)
-                    scaled_height = int(img_region.shape[0] * scaling_factor)
+                    scaled_width = int(roi.shape[1] * scaling_factor)
+                    scaled_height = int(roi.shape[0] * scaling_factor)
 
                     # Create a named window with the scaled size
                     cv2.namedWindow("Scaled Window", cv2.WINDOW_NORMAL)
                     cv2.resizeWindow("Scaled Window", scaled_width, scaled_height)
 
-                    cv2.imshow("Scaled Window", img_region)
+                    cv2.imshow("Scaled Window", roi)
                     # cv2.imshow("Vehicle counter", img_region)
                     cv2.waitKey(1)
 
