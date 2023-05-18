@@ -52,8 +52,8 @@ if os.path.exists(LOCKFILE):
 print("Creating lockfile")
 Path(LOCKFILE).touch()
 
-output_folder = "C:\\videos\\output"
-json_folder = "C:\\videos\\unprocessed_json"
+output_folder = "C:\\videos\\input"
+json_folder = "C:\\videos\\final_json"
 json_file = "measurements.json"
 sensor_file_path = "C:\\videos\\sensor_json\\sensors.json"
 video_backup_dir = "C:\\videos\\day1_backup\\"
