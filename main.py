@@ -104,6 +104,7 @@ for file_path in glob.glob(os.path.join(output_folder, '*.h264')):
                     air_quality = item['air_quality']
                     carbon_monoxide = item['carbon_monoxide']
                     break
+            file.close()
 
         print(f'{filename}')
         print(f'{"car:":<12}{carCount}')
