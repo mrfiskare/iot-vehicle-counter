@@ -55,6 +55,7 @@ Path(LOCKFILE).touch()
 output_folder = "C:\\videos\\output"
 json_folder = "C:\\videos\\unprocessed_json"
 json_file = "measurements.json"
+sensor_file_path = "C:\\videos\\sensor_json\\sensors.json"
 video_backup_dir = "C:\\videos\\day1_backup\\"
 prev_file = ""
 filename = ""
@@ -89,18 +90,27 @@ for file_path in glob.glob(os.path.join(output_folder, '*.h264')):
         temperature = requestAPI.get_temperature()
         precipitation = requestAPI.get_precipitation()
 
-        air_quality_sensor = 0
-        co2_sensor = 0
+        air_quality = 0
+        carbon_monoxide = 0
+
+        with open(sensor_file_path) as json_file:
+            json_data = json.load(json_file)
+
+            for item in json_data:
+                if item['timestamp'] == timestamp_str:
+                    air_quality = item['air_quality']
+                    carbon_monoxide = item['carbon_monoxide']
+                    break
 
         print(f'{filename}')
         print(f'{"car:":<12}{carCount}')
         print(f'{"motorbike:":<12}{motorbikeCount}')
         print(f'{"truck:":<12}{truckCount}')
         print(f'{"bus:":<12}{busCount}')
-        print(f'{"temperature:":<12}{truckCount}')
-        print(f'{"precipitation:":<12}{busCount}')
-        print(f'{"air_quality_sensor:":<12}{truckCount}')
-        print(f'{"co2_sensor:":<12}{busCount}')
+        print(f'{"temperature:":<12}{temperature}')
+        print(f'{"precipitation:":<12}{precipitation}')
+        print(f'{"air_quality:":<12}{air_quality}')
+        print(f'{"carbon_monoxide:":<12}{carbon_monoxide}')
 
         data.append({
             'timestamp': timestamp_iso,
@@ -110,14 +120,15 @@ for file_path in glob.glob(os.path.join(output_folder, '*.h264')):
             'truckCount': truckCount,
             'temperature': temperature,
             'precipitation': precipitation,
-            'air_quality_sensor': temperature,
-            'co2_sensor': precipitation,
+            'air_quality': air_quality,
+            'carbon_monoxide': carbon_monoxide,
 
         })
 
         with open(json_path, 'w') as file:
             json.dump(data, file, indent=4)
             file.close()
+
 
 # Remove the lock file
 os.remove(LOCKFILE)
