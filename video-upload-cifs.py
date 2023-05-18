@@ -4,6 +4,7 @@ import os
 import sys
 import glob
 import subprocess
+import shutil
 from pathlib import Path
 
 LOCKFILE = "/tmp/upload_videos_cifs.lock"
