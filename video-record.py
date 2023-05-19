@@ -94,7 +94,7 @@ for i in range(8):
         arduino.save_to_file(arduino.read_from_arduino(timestamp))
         arduino.close()
 
-        # Move the file to the captured folder
+        # Move the file to the shared windows folder
 
         os.rename(output_filename, done_directory + timestamped_file)
         print(f"Recorded: {done_directory}{timestamp}.h264", file=sys.stdout, flush=True)
