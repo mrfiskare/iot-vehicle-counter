@@ -6,7 +6,6 @@ on:
 jobs:
   ssh-key-action:
     name: Video SCP upload
-    if: ${{ false }}
     runs-on: ubuntu-latest
     steps:
       - name: repo checkout

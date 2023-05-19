@@ -43,7 +43,7 @@ recording_length = 60 * 60
 # Set the output directories
 
 output_directory = "/home/pi/recording/"
-done_directory = "/home/pi/windows-share/"
+done_directory = "/home/pi/recording/recorded/"
 
 # Delete previous recordings
 
