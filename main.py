@@ -85,6 +85,8 @@ for file_path in glob.glob(os.path.join(output_folder, '*.h264')):
 
     if not is_timestamp_present(data, timestamp_iso):
 
+        # Change this to your own path ...
+
         vehicle_counter = VehicleCounter(file_path, "C:\\Users\\pi\\git\\pte-yolo-node\\yolo_weights\\yolov8n.pt", False, False)
         run_result = vehicle_counter.run()
         carCount, motorbikeCount, busCount, truckCount = run_result

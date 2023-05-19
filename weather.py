@@ -58,7 +58,7 @@ class WeatherAPI:
 
 
 # Test
-#api = WeatherAPI('2023-05-18T12:00:00')
+
 api = WeatherAPI('2023-05-18T21:12:00+01:16')
 print(api.get_temperature())
 print(api.get_precipitation())

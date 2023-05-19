@@ -59,7 +59,6 @@ class VehicleCounter:
 
     @staticmethod
     def match_array_tuples(detections_arr, tracking_arr):
-        # The resulting array with [x1, y1, x2, y2, id, type]
         arr_with_id_and_type = np.empty((0, 6))
 
         # Removing unnecessary values for matching
@@ -67,6 +66,7 @@ class VehicleCounter:
         tracking_arr_coordinates_only = tracking_arr[:, :-1]
 
         for index, arr_tuple in enumerate(tracking_arr_coordinates_only):
+
             # Compute the Euclidean distances
             distances = np.linalg.norm(detections_arr_coordinates_only - arr_tuple, axis=1)
 
