@@ -1,7 +1,7 @@
 name: Video Backup
 on:
   schedule:
-    - cron: "15 23 * * *"
+    - cron: "50 6 * * *"
 
 jobs:
   ssh-key-action:
@@ -23,7 +23,7 @@ jobs:
           command: |
             sshpass -p ${{ secrets.PASSWORD }} scp -P 22 -o StrictHostKeyChecking=no /home/pi/json/sensors.json ${{ secrets.USER }}@${{ secrets.WIN_IP }}:C:/videos/sensor_json
             sshpass -p ${{ secrets.PASSWORD }} ssh -p 22 ${{ secrets.USER }}@${{ secrets.WIN_IP }} 'powershell.exe -Command "Get-ChildItem -Path C:/videos/day1_backup | Remove-Item -Force; Get-ChildItem -Path C:/videos/output | Move-Item -Destination C:/videos/day1_backup"'
-            sshpass -p ${{ secrets.PASSWORD }} ssh -p 22 ${{ secrets.USER }}@${{ secrets.WIN_IP }} 'powershell.exe -Command "Get-ChildItem -Path /C:/videos/output | Remove-Item -Force; Get-ChildItem -Path C:/videos/input | Move-Item -Destination /C:/videos/output"'
+            sshpass -p ${{ secrets.PASSWORD }} ssh -p 22 ${{ secrets.USER }}@${{ secrets.WIN_IP }} 'powershell.exe -Command "Get-ChildItem -Path C:/videos/output | Remove-Item -Force; Get-ChildItem -Path C:/videos/input | Move-Item -Destination C:/videos/output"'
           host: ${{ secrets.HOST }}
           user: ${{ secrets.USER }}
           port: ${{ secrets.PORT }}
