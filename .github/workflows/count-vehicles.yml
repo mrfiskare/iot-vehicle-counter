@@ -6,6 +6,7 @@ on:
 jobs:
   ssh-key-action:
     name: Count vehicles
+    if: ${{ false }}
     runs-on: ubuntu-latest
     steps:
       - name: repo checkout
