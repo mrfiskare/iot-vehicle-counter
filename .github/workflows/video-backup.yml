@@ -1,7 +1,7 @@
 name: Video Backup
 on:
   schedule:
-    - cron: "30 23 * * *"
+    - cron: "40 6 * * *"
 
 jobs:
   ssh-key-action:
