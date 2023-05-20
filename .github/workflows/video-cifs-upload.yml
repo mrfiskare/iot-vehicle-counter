@@ -1,11 +1,11 @@
-name: Video SCP upload
+name: Video CIFS upload
 on:
   schedule:
     - cron: "30 7-21/2 * * *"
 
 jobs:
   ssh-key-action:
-    name: Video SCP upload
+    name: Video CIFS upload
     runs-on: ubuntu-latest
     steps:
       - name: repo checkout
@@ -17,7 +17,7 @@ jobs:
           key: ${{ secrets.PRIVATE_KEY }} 
           known_hosts: unnecessary
 
-      - name: SSH -> running video recorder script
+      - name: SSH -> CIFS upload
         uses: fifsky/ssh-action@master
         with:
           command: |
