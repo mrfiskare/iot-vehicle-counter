@@ -21,7 +21,7 @@ print("Creating lockfile")
 Path(LOCKFILE).touch()
 
 SOURCE_DIR = "/home/pi/recording/recorded/"
-DEST_DIR = "/home/pi/windows-share/"
+DEST_DIR = "/home/pi/thesis/video_upload/"
 
 # Get all files in the source_dir
 try:
