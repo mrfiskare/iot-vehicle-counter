@@ -1,7 +1,7 @@
 name: Video CIFS upload
 on:
   schedule:
-    - cron: "30 7-21/2 * * *"
+    - cron: "30 7-21 * * *"
 
 jobs:
   ssh-key-action:
@@ -21,7 +21,7 @@ jobs:
         uses: fifsky/ssh-action@master
         with:
           command: |
-            nohup python3 /home/pi/scripts/video-upload-cifs.py &
+            sudo nohup python3 /home/pi/scripts/video-upload-cifs.py &
           host: ${{ secrets.HOST }}
           user: ${{ secrets.USER }}
           port: ${{ secrets.PORT }}
