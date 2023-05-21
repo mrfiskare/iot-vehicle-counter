@@ -30,7 +30,7 @@ jobs:
         uses: fifsky/ssh-action@master
         with:
           command: |
-            ssh -p 22 ${{ secrets.USER }}@${{ secrets.WIN_IP }} "cd /home/pi/git/pte-yolo-node; git fetch --all; git reset --hard origin/main"
+            sudo ssh -p 22 ${{ secrets.USER }}@${{ secrets.WIN_IP }} "cd /home/pi/git/pte-yolo-node; git fetch --all; git reset --hard origin/main"
           host: ${{ secrets.HOST }}
           user: ${{ secrets.USER }}
           port: ${{ secrets.PORT }}
