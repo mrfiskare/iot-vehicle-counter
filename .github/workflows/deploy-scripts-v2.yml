@@ -61,7 +61,6 @@ jobs:
             tar -xf /home/pi/git/pte-camera-node.tar -C /home/pi/git/
             mv /home/pi/git/repo /home/pi/git/pte-camera-node
             rm -rf /home/pi/git/pte-camera-node.tar
-            cp /home/pi/git/pte-camera-node/*.sh /home/pi/scripts
             cp /home/pi/git/pte-camera-node/*.py /home/pi/scripts
           host: ${{ secrets.HOST }}
           user: ${{ secrets.USER }}
@@ -84,9 +83,9 @@ jobs:
         uses: fifsky/ssh-action@master
         with:
           command: |
-            ssh -p 22 ${{ secrets.USER }}@${{ secrets.WIN_IP }} "cd /home/pi/git/pte-camera-node; git fetch --all; git reset --hard origin/main"
-            sudo rm -rf /home/pi/thesis/scripts/*
+            sudo rm -rfv /home/pi/thesis/scripts/*
             sudo cp /home/pi/scripts/* /home/pi/thesis/scripts/
+            ssh -p 22 ${{ secrets.USER }}@${{ secrets.WIN_IP }} "cd /home/pi/git/pte-camera-node; git fetch --all; git reset --hard origin/main"
           host: ${{ secrets.HOST }}
           user: ${{ secrets.USER }}
           port: ${{ secrets.PORT }}
