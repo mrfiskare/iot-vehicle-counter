@@ -1,5 +1,3 @@
-#!C:/Users/pi/git/pte-yolo-node/venv/Scripts/python.exe
-
 import os
 import json
 import glob
@@ -40,7 +38,7 @@ def is_timestamp_present(data, timestamp_iso):
             return True
     return False
 
-LOCKFILE = "C:\\tmp\\count.lock"
+LOCKFILE = "/tmp/count.lock"
 
 print("Checking lockfile...")
 
@@ -55,13 +53,13 @@ if os.path.exists(LOCKFILE):
 print("Creating lockfile")
 Path(LOCKFILE).touch()
 
-output_folder = "C:\\videos\\output"
-json_folder = "C:\\videos\\final_json"
+output_folder = "/home/pi/thesis/video_to_count"
+json_folder = "/home/pi/thesis/json_all_measurements"
 json_file = "measurements.json"
-sensor_file_path = "C:\\videos\\sensor_json\\sensors.json"
-video_backup_dir = "C:\\videos\\day1_backup\\"
-prev_file = ""
-filename = ""
+sensor_file_path = "/home/pi/thesis/json_sensor_only/sensors.json"
+# video_backup_dir = "C:\\videos\\day1_backup\\"
+# prev_file = ""
+# filename = ""
 
 if not os.path.exists(json_folder):
     os.makedirs(json_folder)
@@ -76,8 +74,8 @@ if os.path.exists(json_path):
 
 for file_path in glob.glob(os.path.join(output_folder, '*.h264')):
 
-    if prev_file != "" and filename != "":
-        os.rename(file_path, video_backup_dir + filename)
+    # if prev_file != "" and filename != "":
+    #     os.rename(file_path, video_backup_dir + filename)
 
     filename = os.path.basename(file_path)
     timestamp_str = os.path.splitext(filename)[0]
@@ -87,7 +85,7 @@ for file_path in glob.glob(os.path.join(output_folder, '*.h264')):
 
         # Change this to your own path ...
 
-        vehicle_counter = VehicleCounter(file_path, "C:\\Users\\pi\\git\\pte-yolo-node\\yolo_weights\\yolov8n.pt", False, False)
+        vehicle_counter = VehicleCounter(file_path, "yolo_weights/yolov8n.pt", False, False)
         run_result = vehicle_counter.run()
         carCount, motorbikeCount, busCount, truckCount = run_result
 
