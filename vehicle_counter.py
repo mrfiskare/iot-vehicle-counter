@@ -29,8 +29,6 @@ class VehicleCounter:
                           "vase", "scissors", "teddy bear", "hair drier", "toothbrush"]
         self.vehicleTypes = ["car", "motorbike", "bus", "truck"]
 
-        self.mask = cv2.imread("mask.png")
-
         # Initializing Sort tracker made by abewley
         max_age = 20
         min_hits = 3
