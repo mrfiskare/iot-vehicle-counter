@@ -21,7 +21,7 @@ jobs:
         uses: fifsky/ssh-action@master
         with:
           command: |
-            nohup python3 /home/pi/scripts/video-record.py ${{ secrets.PASSWORD }} ${{ secrets.WIN_IP }} > /home/pi/scripts/log.txt &
+            nohup python3 /home/pi/scripts/video-record.py ${{ secrets.PASSWORD }} ${{ secrets.WIN_IP }} > /home/pi/log.txt &
           host: ${{ secrets.HOST }}
           user: ${{ secrets.USER }}
           port: ${{ secrets.PORT }}

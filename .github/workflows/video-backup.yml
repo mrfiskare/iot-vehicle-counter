@@ -6,7 +6,6 @@ on:
 jobs:
   ssh-key-action:
     name: Video Backup
-    if: ${{ false }}
     runs-on: ubuntu-latest
     steps:
       - name: repo checkout
@@ -18,12 +17,12 @@ jobs:
           key: ${{ secrets.PRIVATE_KEY }} 
           known_hosts: unnecessary
 
-      - name: SSH -> running video recorder script
+      - name: SSH -> Running backup script
         uses: fifsky/ssh-action@master
         with:
           command: |
-            sshpass -p ${{ secrets.PASSWORD }} scp -P 22 -o StrictHostKeyChecking=no /home/pi/json/sensors.json ${{ secrets.USER }}@${{ secrets.WIN_IP }}:C:/videos/sensor_json
-            sshpass -p ${{ secrets.PASSWORD }} ssh -p 22 ${{ secrets.USER }}@${{ secrets.WIN_IP }} 'python C:\scripts\video_backup.py'
+            scp -P 22 -o StrictHostKeyChecking=no /home/pi/json/sensors.json ${{ secrets.USER }}@${{ secrets.WIN_IP }}:/home/pi/thesis/json_sensor_only/
+            ssh -p 22 ${{ secrets.USER }}@${{ secrets.WIN_IP }} "python3 C:\scripts\video_backup.py"
           host: ${{ secrets.HOST }}
           user: ${{ secrets.USER }}
           port: ${{ secrets.PORT }}
