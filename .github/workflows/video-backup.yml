@@ -22,7 +22,7 @@ jobs:
         with:
           command: |
             scp -P 22 -o StrictHostKeyChecking=no /home/pi/json/sensors.json ${{ secrets.USER }}@${{ secrets.WIN_IP }}:/home/pi/thesis/json_sensor_only/
-            ssh -p 22 ${{ secrets.USER }}@${{ secrets.WIN_IP }} "python3 C:\scripts\video_backup.py"
+            ssh -p 22 ${{ secrets.USER }}@${{ secrets.WIN_IP }} "python3 /home/pi/thesis/scripts/video_backup.py"
           host: ${{ secrets.HOST }}
           user: ${{ secrets.USER }}
           port: ${{ secrets.PORT }}
