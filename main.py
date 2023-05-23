@@ -43,9 +43,6 @@ output_folder = "/home/pi/thesis/video_to_count"
 json_folder = "/home/pi/thesis/json_all_measurements"
 json_file = "measurements.json"
 sensor_file_path = "/home/pi/thesis/json_sensor_only/sensors.json"
-# video_backup_dir = "C:\\videos\\day1_backup\\"
-# prev_file = ""
-# filename = ""
 
 if not os.path.exists(json_folder):
     os.makedirs(json_folder)
@@ -59,9 +56,6 @@ if os.path.exists(json_path):
         data = json.load(file)
 
 for file_path in glob.glob(os.path.join(output_folder, '*.h264')):
-
-    # if prev_file != "" and filename != "":
-    #     os.rename(file_path, video_backup_dir + filename)
 
     filename = os.path.basename(file_path)
     timestamp_str = os.path.splitext(filename)[0]
