@@ -8,6 +8,15 @@ from vehicle_counter import *
 from weather import *
 
 
+def count_vehicles(file_path):
+    # Your implementation for counting vehicles goes here
+    # Example implementation
+    carCount = 5
+    motorbikeCount = 3
+    busCount = 2
+    truckCount = 1
+
+    return carCount, motorbikeCount, busCount, truckCount
 
 
 def convert_to_iso(timestamp_str):
