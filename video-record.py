@@ -90,9 +90,12 @@ for i in range(9):
 
         # Read Arduino values
 
-        arduino = ArduinoReader('/dev/ttyACM0', 9600)
-        arduino.save_to_file(arduino.read_from_arduino(timestamp))
-        arduino.close()
+        try:
+            arduino = ArduinoReader('/dev/ttyACM0', 9600)
+            arduino.save_to_file(arduino.read_from_arduino(timestamp))
+            arduino.close()
+        except Exception as e:
+            print(f"Failed to read from Arduino: {e}")
 
         # Move the file to the shared windows folder
 
