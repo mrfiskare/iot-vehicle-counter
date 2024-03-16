@@ -6,7 +6,6 @@ import os
 import psutil
 import shutil
 from pathlib import Path
-from arduino_reader import *
 
 # Unload the bcm2835-v4l2 driver
 
@@ -61,7 +60,7 @@ if not os.path.exists(done_directory) :
 
 # Record videos splitted into parts
 
-for i in range(9):
+for i in range(8):
 
     # Get the available space on the root partition in GB
 
@@ -88,16 +87,11 @@ for i in range(9):
         camera.stop_recording()
         time.sleep(2)
 
-        # Read Arduino values
+        # Read weather API values
 
-        try:
-            arduino = ArduinoReader('/dev/ttyACM0', 9600)
-            arduino.save_to_file(arduino.read_from_arduino(timestamp))
-            arduino.close()
-        except Exception as e:
-            print(f"Failed to read from Arduino: {e}")
+        # not yet implemented
 
-        # Move the file to the shared windows folder
+        # Move the file to the final folder
 
         os.rename(output_filename, done_directory + timestamped_file)
         print(f"Recorded: {done_directory}{timestamp}.h264", file=sys.stdout, flush=True)
