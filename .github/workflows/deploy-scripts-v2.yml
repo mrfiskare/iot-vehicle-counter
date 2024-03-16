@@ -1,0 +1,92 @@
+name: Deploying scripts V2
+on:
+  - push
+
+jobs:
+  ssh-key-action:
+    name: Deploying scripts V2
+    runs-on: ubuntu-latest
+    steps:
+      - name: repo checkout
+        uses: actions/checkout@master
+        
+      - name: SSH -> installing ssh key
+        uses: shimataro/ssh-key-action@v2.5.1
+        with:
+          key: ${{ secrets.PRIVATE_KEY }} 
+          known_hosts: unnecessary
+
+      - name: Check ssh-keyscan installation
+        run: which ssh-keyscan || sudo apt-get update && sudo apt-get install -y openssh-client
+          
+      # - name: SSH -> adding remote to known hosts
+      #   # port: 10121
+      #   run: ssh-keyscan -p ${{ secrets.PORT }} -H ${{ secrets.HOST }}  >> ~/.ssh/known_hosts
+
+      - name: SSH -> removing old scripts
+        uses: fifsky/ssh-action@master
+        with:
+          command: |
+            rm -rfv /home/pi/scripts/*
+            rm -rfv /home/pi/git/pte-camera-node
+          host: ${{ secrets.HOST }}
+          user: ${{ secrets.USER }}
+          port: ${{ secrets.PORT }}
+          key: ${{ secrets.PRIVATE_KEY}}
+
+      - name: Compressing the repo for upload
+        run: |
+          mkdir ../repo
+          cp -TR . ../repo
+          tar -cvf repo.tar ../repo/
+          mv repo.tar pte-camera-node.tar
+      
+      - name: SCP upload -> pte-camera-node.tar
+        uses: nicklasfrahm/scp-action@main
+        with:
+          direction: "upload"
+          host: ${{ secrets.HOST }}
+          port: ${{ secrets.PORT }}
+          username: ${{ secrets.USER }}
+          insecure_ignore_fingerprint: "true"
+          fingerprint: ${{ secrets.FINGERPRINT }}
+          key: ${{ secrets.PRIVATE_KEY }}
+          source: "pte-camera-node.tar"
+          target: "/home/pi/git/pte-camera-node.tar"
+
+      - name: SSH -> Extracting pte-camera-node.tar
+        uses: fifsky/ssh-action@master
+        with:
+          command: |
+            tar -xf /home/pi/git/pte-camera-node.tar -C /home/pi/git/
+            mv /home/pi/git/repo /home/pi/git/pte-camera-node
+            rm -rf /home/pi/git/pte-camera-node.tar
+            cp /home/pi/git/pte-camera-node/*.py /home/pi/scripts
+          host: ${{ secrets.HOST }}
+          user: ${{ secrets.USER }}
+          port: ${{ secrets.PORT }}
+          key: ${{ secrets.PRIVATE_KEY}}
+
+      - name: SSH -> creating video-record-test.py
+        uses: fifsky/ssh-action@master
+        with:
+          command: |
+            cp /home/pi/scripts/video-record.py /home/pi/scripts/video-record-test.py
+            sed -i 's/60 \* 60/10 \* 1/g' /home/pi/scripts/video-record-test.py
+            sed -i 's/range([0-9]\{1,2\})/range(1)/g' /home/pi/scripts/video-record-test.py
+          host: ${{ secrets.HOST }}
+          user: ${{ secrets.USER }}
+          port: ${{ secrets.PORT }}
+          key: ${{ secrets.PRIVATE_KEY}}
+
+      - name: Fedora Server -> Deploying scripts
+        uses: fifsky/ssh-action@master
+        with:
+          command: |
+            sudo rm -rfv /home/pi/thesis/scripts/*
+            sudo cp /home/pi/scripts/* /home/pi/thesis/scripts/
+            ssh -p 22 ${{ secrets.USER }}@${{ secrets.WIN_IP }} "cd /home/pi/git/pte-camera-node; git fetch --all; git reset --hard origin/main"
+          host: ${{ secrets.HOST }}
+          user: ${{ secrets.USER }}
+          port: ${{ secrets.PORT }}
+          key: ${{ secrets.PRIVATE_KEY}}

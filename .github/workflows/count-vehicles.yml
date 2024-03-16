@@ -1,0 +1,29 @@
+name: Count vehicles
+on:
+  schedule:
+    - cron: "45 23 * * *"
+
+jobs:
+  ssh-key-action:
+    name: Count vehicles
+    if: ${{ false }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: repo checkout
+        uses: actions/checkout@master
+        
+      - name: SSH -> installing ssh key
+        uses: shimataro/ssh-key-action@v2.5.0
+        with:
+          key: ${{ secrets.PRIVATE_KEY }} 
+          known_hosts: unnecessary
+          
+      - name: SSH -> running video counter script
+        uses: fifsky/ssh-action@master
+        with:
+          command: |
+            nohup ssh -p 22 ${{ secrets.USER }}@${{ secrets.WIN_IP }} 'source /home/pi/git/pyvenv/bin/activate && nohup python3 /home/pi/git/pte-yolo-node/main.py > /dev/null 2>&1 &' &
+          host: ${{ secrets.HOST }}
+          user: ${{ secrets.USER }}
+          port: ${{ secrets.PORT }}
+          key: ${{ secrets.PRIVATE_KEY}}

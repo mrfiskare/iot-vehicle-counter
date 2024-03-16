@@ -1,0 +1,30 @@
+name: Video Crop
+on:
+  schedule:
+    - cron: "0 18 * * *"
+
+jobs:
+  ssh-key-action:
+    name: Video Crop
+    if: ${{ false }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - name: repo checkout
+        uses: actions/checkout@master
+        
+      - name: SSH -> installing ssh key
+        uses: shimataro/ssh-key-action@v2.5.0
+        with:
+          key: ${{ secrets.PRIVATE_KEY }} 
+          known_hosts: unnecessary
+
+      - name: SSH -> running video recorder script
+        uses: fifsky/ssh-action@master
+        with:
+          command: |
+            nohup sshpass -p ${{ secrets.PASSWORD }} ssh -p 22 ${{ secrets.USER }}@${{ secrets.WIN_IP }} 'start /B cmd /C "python C:\scripts\video-crop.py"' &
+          host: ${{ secrets.HOST }}
+          user: ${{ secrets.USER }}
+          port: ${{ secrets.PORT }}
+          key: ${{ secrets.PRIVATE_KEY}}
