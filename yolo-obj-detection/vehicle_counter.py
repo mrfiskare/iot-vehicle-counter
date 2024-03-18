@@ -4,6 +4,7 @@ import cv2
 import cvzone
 import math
 from sort import *
+import time
 
 
 class VehicleCounter:
@@ -85,6 +86,13 @@ class VehicleCounter:
 
         return arr_with_id_and_type.astype(int)
 
+    @staticmethod
+    def format_time(duration):
+        hours = int(duration // 3600)
+        minutes = int((duration % 3600) // 60)
+        seconds = int(duration % 60)
+        return f"{hours} hours {minutes} minutes {seconds} seconds"
+
     def update_tracker(self, tracker, detections, img):
         # Matching the rows from detections to tracker_results.
         # This is needed because the detections array contains the vehicle types,
@@ -125,8 +133,14 @@ class VehicleCounter:
                     self.busCount.append(tracking_id)
 
     def run(self):
+
+        # Record the algorithm's start time, and sum the length of each iteration
+
+        start_time = time.time()
+        total_iteration_time = 0
+
         while True:
-            # ret, im = self.cap.read()
+            loop_start_time = time.time()
             ret, im = self.cap.read()
 
             if not ret or im is None:
@@ -222,6 +236,13 @@ class VehicleCounter:
                         os.system('clear')
                     else:
                         os.system('cls')
+
+            # Calculate the duration of the algorithm
+
+            loop_duration = time.time() - loop_start_time
+            total_iteration_time += loop_duration
+
+        print("Total time spent in iterations:", self.format_time(total_iteration_time))
 
         cv2.destroyAllWindows()
 
