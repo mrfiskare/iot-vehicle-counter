@@ -8,7 +8,7 @@ import time
 
 
 class VehicleCounter:
-    def __init__(self, video_path="videos/10s_1080p.h264", yolo_weights_path="yolo_weights/yolov8n.pt", show_img=True, verbose=True):
+    def __init__(self, video_path="videos/test.h264", yolo_weights_path="yolo_weights/yolov8n.pt", show_img=True, verbose=True):
         self.video_path = video_path
         self.cap = cv2.VideoCapture(video_path)
         self.show_img = show_img
