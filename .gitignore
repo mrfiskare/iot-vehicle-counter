@@ -195,7 +195,7 @@ tmp
 .projects
 *.orig
 screenshots
-videos
+# videos
 out.js
 examples/*/cypress/logs
 examples/*/cypress/downloads
