@@ -7,7 +7,7 @@ import pytz
 class WeatherAPI:
     def __init__(self, iso_datetime):
         self.iso_datetime = iso_datetime
-        self.base_url = "https://api.open-meteo.com/v1/forecast"
+        self.base_url = "https://archive-api.open-meteo.com/v1/archive"
 
     def get_unixtime(self):
         dt = datetime.fromisoformat(self.iso_datetime)
@@ -59,6 +59,6 @@ class WeatherAPI:
 
 # Test
 
-api = WeatherAPI('2023-05-18T21:12:00+01:16')
+api = WeatherAPI('2024-04-16T16:00:00+01:16')
 print(api.get_temperature())
 print(api.get_precipitation())
