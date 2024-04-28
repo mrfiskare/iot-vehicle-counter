@@ -41,8 +41,8 @@ recording_length = 60 * 60
 
 # Set the output directories
 
-output_directory = "/home/pi/recording/"
-done_directory = "/home/pi/recording/video_transfer/"
+output_directory = "/mnt/usb/recording/"
+done_directory = "/mnt/usb/recording/video_transfer/"
 
 # Delete previous recordings
 
