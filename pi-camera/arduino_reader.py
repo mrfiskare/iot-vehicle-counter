@@ -15,16 +15,14 @@ class ArduinoReader:
             "air_quality": 0
         }
 
-
     def read_from_arduino(self, timestamp):
         arduino_data = self.serial_data.readline().decode('utf-8').strip()
         measurement_dict = json.loads(arduino_data)
         self.measurement["carbon_monoxide"] = measurement_dict["carbon_monoxide"]
         self.measurement["air_quality"] = measurement_dict["air_quality"]
-        self.measurement['timestamp'] = timestamp     
+        self.measurement['timestamp'] = timestamp
         return json.dumps(self.measurement)
-        
-        
+
     def save_to_file(self, data):
         json_folder = "/home/pi/json"
         json_file = "sensors.json"
@@ -53,15 +51,16 @@ class ArduinoReader:
 
         print("Data saved to sensors.json")
 
-
     def close(self):
         self.serial_data.close()
+
 
 # Function to handle keyboard interrupt
 def handle_interrupt(signal, frame):
     print("Keyboard interrupt detected. Closing the serial port...")
     arduino.close()
     sys.exit(0)
+
 
 if __name__ == "__main__":
 

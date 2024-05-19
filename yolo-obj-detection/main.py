@@ -14,8 +14,6 @@ from weather import *
 
 
 def count_vehicles(file_path):
-    # Your implementation for counting vehicles goes here
-    # Example implementation
     carCount = 5
     motorbikeCount = 3
     busCount = 2
@@ -37,6 +35,7 @@ def is_timestamp_present(data, timestamp_iso):
         if entry['timestamp'] == timestamp_iso:
             return True
     return False
+
 
 LOCKFILE = "/tmp/count.lock"
 
