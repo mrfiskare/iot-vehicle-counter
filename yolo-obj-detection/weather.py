@@ -4,17 +4,17 @@ import requests
 from datetime import datetime
 import pytz
 
+
 class WeatherAPI:
     def __init__(self, iso_datetime):
         self.iso_datetime = iso_datetime
         self.base_url = "https://archive-api.open-meteo.com/v1/archive"
 
-    def get_unixtime(self):
+    def get_unix_time(self):
         dt = datetime.fromisoformat(self.iso_datetime)
         dt = dt.replace(minute=0)
         unixtime = dt.replace(tzinfo=pytz.UTC).timestamp()
         return int(unixtime)
-
 
     def get_weather_data(self):
         iso_date = self.iso_datetime.split('T')[0]  # get the date part
@@ -32,7 +32,7 @@ class WeatherAPI:
 
     def get_weather_at_timestamp(self):
         data = self.get_weather_data()
-        timestamp = self.get_unixtime()
+        timestamp = self.get_unix_time()
         if 'hourly' in data and 'time' in data['hourly']:
             try:
                 idx = data['hourly']['time'].index(timestamp)
@@ -59,6 +59,6 @@ class WeatherAPI:
 
 # Test
 
-api = WeatherAPI('2024-04-16T16:00:00+01:16')
+api = WeatherAPI('2024-05-17T21:00:00+01:16')
 print(api.get_temperature())
 print(api.get_precipitation())

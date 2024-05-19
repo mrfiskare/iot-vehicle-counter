@@ -5,6 +5,7 @@ import picamera
 import os
 import psutil
 import shutil
+from weather_api import WeatherAPI
 from pathlib import Path
 
 # Unload the bcm2835-v4l2 driver
@@ -89,7 +90,11 @@ for i in range(8):
 
         # Read weather API values
 
-        # not yet implemented
+        try:
+            api = WeatherAPI(timestamp)
+            api.save_to_file(api.read_weather_api())
+        except Exception as e:
+            print(f"Failed to read from API: {e}")
 
         # Move the file to the final folder
 
