@@ -7,19 +7,8 @@ import time
 import datetime
 import re
 from pathlib import Path
-
 from pytz import timezone
 from vehicle_counter import *
-from weather import *
-
-
-def count_vehicles(file_path):
-    carCount = 5
-    motorbikeCount = 3
-    busCount = 2
-    truckCount = 1
-
-    return carCount, motorbikeCount, busCount, truckCount
 
 
 def convert_to_iso(timestamp_str):
@@ -76,26 +65,22 @@ for file_path in glob.glob(os.path.join(output_folder, '*.h264')):
 
     if not is_timestamp_present(data, timestamp_iso):
 
-        # Change this to your own path ...
-
         vehicle_counter = VehicleCounter(file_path, "yolo_weights/yolov8n.pt", False, False)
         run_result = vehicle_counter.run()
         carCount, motorbikeCount, busCount, truckCount = run_result
 
-        requestAPI = WeatherAPI(timestamp_iso)
-        temperature = requestAPI.get_temperature()
-        precipitation = requestAPI.get_precipitation()
-
+        temperature = 0.0
+        weather_category = ''
         air_quality = 0
-        carbon_monoxide = 0
 
         with open(sensor_file_path) as json_file:
             json_data = json.load(json_file)
 
             for item in json_data:
                 if item['timestamp'] == timestamp_str:
+                    temperature = item['temperature']
+                    weather_category = item['weather_category']
                     air_quality = item['air_quality']
-                    carbon_monoxide = item['carbon_monoxide']
                     break
             json_file.close()
 
@@ -105,9 +90,8 @@ for file_path in glob.glob(os.path.join(output_folder, '*.h264')):
         print(f'{"truck:":<12}{truckCount}')
         print(f'{"bus:":<12}{busCount}')
         print(f'{"temperature:":<12}{temperature}')
-        print(f'{"precipitation:":<12}{precipitation}')
+        print(f'{"weather_category:":<12}{weather_category}')
         print(f'{"air_quality:":<12}{air_quality}')
-        print(f'{"carbon_monoxide:":<12}{carbon_monoxide}')
 
         data.append({
             'timestamp': timestamp_iso,
@@ -116,9 +100,8 @@ for file_path in glob.glob(os.path.join(output_folder, '*.h264')):
             'busCount': busCount,
             'truckCount': truckCount,
             'temperature': temperature,
-            'precipitation': precipitation,
-            'air_quality': air_quality,
-            'carbon_monoxide': carbon_monoxide
+            'weather_category': weather_category,
+            'air_quality': air_quality
         })
 
         with open(json_path, 'w') as file:
