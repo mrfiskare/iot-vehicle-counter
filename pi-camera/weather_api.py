@@ -115,7 +115,11 @@ class WeatherAPI:
             json.dump(data, file, indent=4)
             file.close()
 
-        print("Data saved to sensors.json")
+        print(f"sensors.json -> "
+              f"[{self.measurement['temperature']}°C, "
+              f"{self.measurement['weather_category']}, "
+              f"{self.measurement['air_quality']}] at "
+              f"{self.measurement['timestamp']}")
 
 
 if __name__ == "__main__":
