@@ -18,8 +18,8 @@ if os.path.exists(LOCKFILE):
 print("Creating lockfile")
 Path(LOCKFILE).touch()
 
-SOURCE_DIR = "/home/pi/recording/recorded/"
-DEST_DIR = "/home/pi/thesis/video_upload/"
+SOURCE_DIR = "/home/pi/recording/video_transfer/"
+DEST_DIR = "/home/pi/sharedfolder/"
 
 # Get all files in the source_dir
 try:
