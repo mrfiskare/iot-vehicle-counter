@@ -22,7 +22,7 @@ jobs:
         uses: fifsky/ssh-action@master
         with:
           command: |
-            sudo nohup python3 /home/pi/scripts/video-upload-cifs.py &
+            sudo nohup python3 /home/pi/scripts/video-upload.py &
           host: ${{ secrets.HOST }}
           user: ${{ secrets.USER }}
           port: ${{ secrets.PORT }}
