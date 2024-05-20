@@ -47,16 +47,16 @@ done_directory = "/mnt/usb/recording/video_transfer/"
 
 # Delete previous recordings
 
-if os.path.exists(output_directory) :
+if os.path.exists(output_directory):
     shutil.rmtree(output_directory)
 
-if not os.path.exists(output_directory) :
+if not os.path.exists(output_directory):
     os.makedirs(output_directory)
 
-if os.path.exists(done_directory) :
+if os.path.exists(done_directory):
     shutil.rmtree(done_directory)
 
-if not os.path.exists(done_directory) :
+if not os.path.exists(done_directory):
     os.makedirs(done_directory)
 
 # Record videos splitted into parts
