@@ -4,11 +4,11 @@ import glob
 import shutil
 import sys
 import time
-import datetime
+from datetime import datetime, timezone
 import re
 from pathlib import Path
 from pytz import timezone
-from vehicle_counter import *
+from vehicle_counter import VehicleCounter
 
 
 def convert_to_iso(timestamp_str):
