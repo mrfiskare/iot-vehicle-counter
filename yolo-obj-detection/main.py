@@ -41,7 +41,8 @@ if os.path.exists(LOCKFILE):
 print("Creating lockfile")
 Path(LOCKFILE).touch()
 
-output_folder = "/home/pi/thesis/video_to_count"
+# output_folder = "/home/pi/thesis/video_to_count"
+output_folder = "/media/pi/HDD/video_to_count"
 json_folder = "/home/pi/thesis/json_all_measurements"
 json_file = "measurements.json"
 sensor_file_path = "/home/pi/thesis/json_sensor_only/sensors.json"
@@ -67,6 +68,7 @@ for file_path in glob.glob(os.path.join(output_folder, '*.h264')):
 
         vehicle_counter = VehicleCounter(file_path, "yolo_weights/yolov8n.pt", False, False)
         run_result = vehicle_counter.run()
+        os.remove(file_path)
         carCount, motorbikeCount, busCount, truckCount = run_result
 
         temperature = 0.0
